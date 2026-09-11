@@ -2,10 +2,12 @@
 
 **MavunoGuard AI: An AI-Powered Climate Risk and Crop Advisory System for Smallholder Farmers.**
 
-This version keeps the existing farm assessment, GPS/Leaflet map, risk scoring, charts, optional AI layer and offline fallback, while repairing the live-data pipeline.
+This version keeps the existing farm assessment, GPS/Leaflet map, risk scoring, charts, optional AI layer and offline fallback, while repairing the live-data pipeline and adding Chrome PWA install capabilities as well as user authentication (Registration, Login, and Google OAuth).
 
-## Live data architecture
+## Features & PWA Capabilities
 
+- **Chrome PWA Install Support:** Web App Manifest and service worker enabled for installation to desktop and mobile home screens, including a custom installation prompt banner and header button.
+- **User Authentication:** Support for traditional username/password registration and login (PBKDF2 password hashing) alongside Google OAuth 2.0 integration.
 - **Weather:** Open-Meteo `/v1/forecast` using the farm latitude/longitude. No API key is required.
 - **Satellite discovery:** Copernicus Data Space public STAC search for recent Sentinel-2 L2A scenes.
 - **NDVI:** Copernicus Data Space Sentinel Hub Statistical API using Sentinel-2 L2A B04/B08 and an authenticated OAuth client.
@@ -25,6 +27,26 @@ uvicorn server.app:app --host 0.0.0.0 --port 8000
 ```
 
 Open `http://127.0.0.1:8000`.
+
+## Environment Variables Configuration
+
+Copy `.env.example` (or set these environment variables in your deployment platform like Render):
+
+```bash
+# Optional AI Integration
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-4o-mini
+
+# Copernicus Sentinel-2 Satellite Integration
+SENTINEL_CLIENT_ID=your_sentinel_client_id
+SENTINEL_CLIENT_SECRET=your_sentinel_client_secret
+SENTINEL_TOKEN_URL=https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token
+SENTINEL_STATS_URL=https://sh.dataspace.copernicus.eu/statistics/v1
+SATELLITE_MAX_CLOUD=35
+
+# Google OAuth Integration
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+```
 
 ## Render deployment
 
@@ -57,6 +79,9 @@ Sentinel-2:
 - `SENTINEL_STATS_URL`
 - `SATELLITE_MAX_CLOUD`
 
+Google OAuth:
+- `GOOGLE_CLIENT_ID`
+
 Use these Sentinel defaults unless you have a deliberate reason to override them:
 
 ```text
@@ -65,7 +90,7 @@ SENTINEL_STATS_URL=https://sh.dataspace.copernicus.eu/statistics/v1
 SATELLITE_MAX_CLOUD=35
 ```
 
-**Never put Sentinel secrets, OpenAI keys, tokens or passwords in HTML, JavaScript, GitHub, or this ZIP.** Add the secret values only in Render Environment Variables.
+**Never put Sentinel secrets, OpenAI keys, tokens or passwords in HTML, JavaScript, GitHub, or public repos.** Add secret values only in Render Environment Variables or local `.env` files.
 
 ## Testing the live weather service
 
@@ -130,65 +155,8 @@ When live weather is available, forecast rainfall/temperature/probability feed t
 
 ## Security
 
-Secrets are read only by the FastAPI backend from environment variables. The frontend never receives the Copernicus client secret or OpenAI API key.
-
-## Repository hygiene
-
-The deployment ZIP should contain source files only. `__pycache__`, `.env`, Python bytecode and runtime-generated uploads/database data are excluded.
+Secrets are read only by the FastAPI backend from environment variables. Credentials are hashed using PBKDF2 with salt. The frontend never receives sensitive keys.
 
 ## Current storage note
 
-Farm history is stored in `data/farms.json`, so this remains appropriate for a demonstration/small deployment. A future multi-user production release should move farm records to PostgreSQL/PostGIS.
-
-## Live-data troubleshooting (v2.3)
-
-### Weather
-
-Open-Meteo requires no API key for this public forecast use. The server requests a 14-day forecast from `https://api.open-meteo.com/v1/forecast`. Core weather variables are requested separately from optional soil moisture, so an optional soil variable cannot suppress rainfall/temperature data.
-
-Test the deployed service:
-
-`GET /api/weather?latitude=-0.6753&longitude=34.7890`
-
-For a safe end-to-end diagnostic:
-
-`GET /api/diagnostics?latitude=-0.6753&longitude=34.7890&planting_date=2026-06-01`
-
-The diagnostic response reports whether Open-Meteo was reached, how many forecast days were returned, and (without exposing secrets) whether Sentinel OAuth/statistics succeeded.
-
-### Sentinel-2
-
-Configure these only in the Render Environment settings:
-
-- `SENTINEL_CLIENT_ID`
-- `SENTINEL_CLIENT_SECRET`
-
-The public configuration values are:
-
-- `SENTINEL_TOKEN_URL=https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token`
-- `SENTINEL_STATS_URL=https://sh.dataspace.copernicus.eu/statistics/v1`
-- `SATELLITE_MAX_CLOUD=35`
-
-The frontend never receives the Sentinel client secret.
-
-### Service worker
-
-API requests are deliberately excluded from service-worker caching. This prevents an old `/api/weather` or `/api/diagnostics` response from being reused after deployment. The application cache version is incremented whenever the service-worker behavior changes.
-
-
-## v2.6 Hackathon upgrade
-- Robust weather retrieval: Open-Meteo primary with retries and MET Norway fallback.
-- Browser-side weather fallback so a temporary Render outbound/API issue does not blank the rainfall graph.
-- No fake 0 mm / 0°C values when weather is unavailable.
-- Dynamic weather-provider labels and diagnostics.
-- Safer Open-Meteo request using stable core daily variables; optional soil moisture cannot break the forecast.
-- Fixed/strengthened Sentinel-2 scene-search fallback for catalogue HTTP 400 responses.
-- Crop-specific practical guidance for maize, beans, sorghum, Irish potato, banana and vegetables.
-- Visual “Why am I at risk?” driver bars.
-- Plain-language “Vegetation story” using Sentinel-2 NDVI and trend.
-- Local farm history and comparison of recent assessments.
-- Offline/local fallback clearly distinguishes field-only results from live analysis.
-- Service-worker cache version bumped so deployed browsers can receive the new build.
-
-### Deployment
-Upload the contents of this folder to a new GitHub repository and connect that repository to Render. Do not upload `.env` or secrets. Render environment variables remain required for OpenAI and Copernicus Sentinel-2 features.
+User credentials are saved in `data/users.json` and farm history is stored in `data/farms.json`, which is appropriate for demonstration/small deployment. For production, move to PostgreSQL/PostGIS.

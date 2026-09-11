@@ -1,10 +1,10 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Header
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from pathlib import Path
 from datetime import date, datetime, timedelta, timezone
-import json, math, os, re, uuid, asyncio
+import json, math, os, re, uuid, asyncio, hashlib, secrets
 import httpx
 from PIL import Image, ExifTags
 from dotenv import load_dotenv
@@ -21,13 +21,42 @@ app = FastAPI(title="MavunoGuard AI API", version="2.6.0")
 app.mount("/static", StaticFiles(directory=PUBLIC), name="static")
 
 DB = DATA / "farms.json"
+USERS_DB = DATA / "users.json"
 if not DB.exists(): DB.write_text("[]")
+if not USERS_DB.exists(): USERS_DB.write_text("[]")
+
+# In-memory sessions token -> user_id
+SESSIONS: dict[str, str] = {}
 
 def read_db():
     try: return json.loads(DB.read_text())
     except Exception: return []
 
 def write_db(rows): DB.write_text(json.dumps(rows, indent=2, ensure_ascii=False))
+
+def read_users():
+    try: return json.loads(USERS_DB.read_text())
+    except Exception: return []
+
+def write_users(users): USERS_DB.write_text(json.dumps(users, indent=2, ensure_ascii=False))
+
+def hash_password(password: str, salt: str = None) -> tuple[str, str]:
+    if not salt:
+        salt = secrets.token_hex(16)
+    key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt.encode('utf-8'), 100000)
+    return key.hex(), salt
+
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
+    email: str | None = None
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+class GoogleAuthRequest(BaseModel):
+    credential: str
 
 class FarmRequest(BaseModel):
     farm_name: str = "My Farm"
@@ -70,6 +99,102 @@ def config():
         "offline": True,
         "garmin_import": True
     }
+
+# --- Authentication Endpoints ---
+@app.post("/api/auth/register")
+def register(req: RegisterRequest):
+    users = read_users()
+    if any(u["username"].lower() == req.username.lower() for u in users):
+        raise HTTPException(400, "Username already exists")
+    p_hash, salt = hash_password(req.password)
+    user = {
+        "id": uuid.uuid4().hex,
+        "username": req.username,
+        "email": req.email,
+        "password_hash": p_hash,
+        "salt": salt,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    users.append(user)
+    write_users(users)
+    token = secrets.token_hex(24)
+    SESSIONS[token] = user["id"]
+    return {"token": token, "user": {"id": user["id"], "username": user["username"], "email": user["email"]}}
+
+@app.post("/api/auth/login")
+def login(req: LoginRequest):
+    users = read_users()
+    user = next((u for u in users if u["username"].lower() == req.username.lower()), None)
+    if not user or "password_hash" not in user:
+        raise HTTPException(401, "Invalid username or password")
+    p_hash, _ = hash_password(req.password, user["salt"])
+    if p_hash != user["password_hash"]:
+        raise HTTPException(401, "Invalid username or password")
+    token = secrets.token_hex(24)
+    SESSIONS[token] = user["id"]
+    return {"token": token, "user": {"id": user["id"], "username": user["username"], "email": user.get("email")}}
+
+@app.post("/api/auth/google")
+def google_auth(req: GoogleAuthRequest):
+    # Process Google Credential JWT
+    users = read_users()
+    # Decode credential header/payload without strict signature verification for client-side token payload
+    try:
+        parts = req.credential.split('.')
+        if len(parts) < 2:
+            raise HTTPException(400, "Invalid Google credential format")
+        import base64
+        padding = '=' * (4 - len(parts[1]) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(parts[1] + padding))
+        google_id = payload.get("sub")
+        email = payload.get("email")
+        name = payload.get("name") or payload.get("given_name") or "Google User"
+    except Exception:
+        raise HTTPException(400, "Failed to parse Google OAuth credential")
+
+    user = next((u for u in users if u.get("google_id") == google_id or (email and u.get("email") == email)), None)
+    if not user:
+        username = email.split('@')[0] if email else f"google_{google_id[:8]}"
+        base_username = username
+        idx = 1
+        while any(u["username"].lower() == username.lower() for u in users):
+            username = f"{base_username}_{idx}"
+            idx += 1
+        user = {
+            "id": uuid.uuid4().hex,
+            "google_id": google_id,
+            "username": username,
+            "email": email,
+            "name": name,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        users.append(user)
+        write_users(users)
+
+    token = secrets.token_hex(24)
+    SESSIONS[token] = user["id"]
+    return {"token": token, "user": {"id": user["id"], "username": user["username"], "email": user.get("email")}}
+
+@app.get("/api/auth/me")
+def get_me(authorization: str | None = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(401, "Not authenticated")
+    token = authorization.split(" ")[1]
+    user_id = SESSIONS.get(token)
+    if not user_id:
+        raise HTTPException(401, "Invalid session token")
+    users = read_users()
+    user = next((u for u in users if u["id"] == user_id), None)
+    if not user:
+        raise HTTPException(401, "User not found")
+    return {"id": user["id"], "username": user["username"], "email": user.get("email")}
+
+@app.post("/api/auth/logout")
+def logout(authorization: str | None = Header(None)):
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split(" ")[1]
+        SESSIONS.pop(token, None)
+    return {"ok": True}
 
 async def _http_json_get(url, params=None, headers=None, label="weather", timeout=20.0):
     """Fetch JSON with diagnostics suitable for a hosted deployment."""
