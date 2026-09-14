@@ -1,1 +1,1589 @@
-[]
+[
+  {
+    "id": "4b138f02cc10463083f5e9d9112375c2",
+    "created_at": "2026-09-14T12:24:23.531346+00:00",
+    "farm": {
+      "farm_name": "infinitetest",
+      "latitude": -1.0671499,
+      "longitude": 34.4787757,
+      "farm_size": 1.0,
+      "farm_unit": "Hectares",
+      "crop": "maize",
+      "variety": "cccc",
+      "planting_date": "2026-01-02",
+      "harvest_date": "2027-07-03",
+      "soil": null,
+      "drainage": null,
+      "flood_history": "Occasionally",
+      "slope": null,
+      "health": null,
+      "problems": [],
+      "noticed": "Today",
+      "use_ai": true
+    },
+    "risk": {
+      "score": 55,
+      "title": "MODERATE",
+      "drought": 30,
+      "flood": 5,
+      "crop_stress": 47,
+      "reasons": [
+        "recent Sentinel-2 NDVI is low (0.23)",
+        "vegetation vigor is falling across the available Sentinel-2 observations"
+      ],
+      "actions": [
+        "Walk the low-vigor part of the field first; compare it with a healthy patch before changing inputs."
+      ],
+      "weather": {
+        "live": true,
+        "source": "Open-Meteo forecast",
+        "rain7_mm": 25.6,
+        "max_temp_7d_c": 31.0,
+        "wet_days_7d": 2,
+        "heavy_rain_days_7d": 0,
+        "drought_risk": 30,
+        "flood_risk": 5,
+        "series": [
+          {
+            "date": "2026-09-14",
+            "rain": 4.8,
+            "temp": 28.6,
+            "prob": 100,
+            "soil_moisture": 0.1499
+          },
+          {
+            "date": "2026-09-15",
+            "rain": 3.5,
+            "temp": 31.0,
+            "prob": 100,
+            "soil_moisture": 0.1327
+          },
+          {
+            "date": "2026-09-16",
+            "rain": 5.4,
+            "temp": 30.6,
+            "prob": 95,
+            "soil_moisture": 0.1225
+          },
+          {
+            "date": "2026-09-17",
+            "rain": 10.1,
+            "temp": 28.8,
+            "prob": 92,
+            "soil_moisture": 0.1297
+          },
+          {
+            "date": "2026-09-18",
+            "rain": 0.3,
+            "temp": 28.4,
+            "prob": 71,
+            "soil_moisture": 0.1173
+          },
+          {
+            "date": "2026-09-19",
+            "rain": 0.3,
+            "temp": 28.1,
+            "prob": 53,
+            "soil_moisture": 0.1165
+          },
+          {
+            "date": "2026-09-20",
+            "rain": 1.2,
+            "temp": 29.2,
+            "prob": 42,
+            "soil_moisture": 0.1061
+          },
+          {
+            "date": "2026-09-21",
+            "rain": 1.8,
+            "temp": 24.3,
+            "prob": 85,
+            "soil_moisture": 0.0967
+          },
+          {
+            "date": "2026-09-22",
+            "rain": 2.0,
+            "temp": 25.8,
+            "prob": 80,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-23",
+            "rain": 3.4,
+            "temp": 25.8,
+            "prob": 77,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-24",
+            "rain": 0.0,
+            "temp": 27.6,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-25",
+            "rain": 0.0,
+            "temp": 27.1,
+            "prob": 19,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-26",
+            "rain": 3.0,
+            "temp": 25.5,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-27",
+            "rain": 0.6,
+            "temp": 29.8,
+            "prob": 43,
+            "soil_moisture": null
+          }
+        ]
+      },
+      "ndvi_trend": "falling",
+      "monitoring_window": "farm-size-derived",
+      "headline": "MODERATE",
+      "explanation": "The score combines the weather outlook, your reported field conditions and—when configured—Sentinel-2 vegetation information.",
+      "watch_next": [
+        "Recheck after the next heavy rainfall or 3–5 dry days.",
+        "Compare the same field location over time."
+      ]
+    },
+    "satellite": {
+      "available": false,
+      "scenes": [],
+      "source": "CDSE STAC",
+      "reason": "Client error '400 Bad Request' for url 'https://stac.dataspace.copernicus.eu/v1/collections/sentinel-2-l2a/items?bbox=34.4687757%2C-1.0771499%2C34.4887757%2C-1.0571499&datetime=2026-06-16%2F2026-09-14&limit=5'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "ndvi": {
+        "available": true,
+        "status": "ok",
+        "series": [
+          {
+            "date": "2026-01-02",
+            "ndvi": 0.469
+          },
+          {
+            "date": "2026-01-16",
+            "ndvi": 0.446
+          },
+          {
+            "date": "2026-01-30",
+            "ndvi": 0.401
+          },
+          {
+            "date": "2026-02-13",
+            "ndvi": 1.0
+          },
+          {
+            "date": "2026-02-27",
+            "ndvi": -0.004
+          },
+          {
+            "date": "2026-03-13",
+            "ndvi": 0.298
+          },
+          {
+            "date": "2026-03-27",
+            "ndvi": 0.72
+          },
+          {
+            "date": "2026-04-10",
+            "ndvi": 0.394
+          },
+          {
+            "date": "2026-04-24",
+            "ndvi": 0.503
+          },
+          {
+            "date": "2026-05-08",
+            "ndvi": 0.553
+          },
+          {
+            "date": "2026-05-22",
+            "ndvi": 0.533
+          },
+          {
+            "date": "2026-06-05",
+            "ndvi": 0.479
+          },
+          {
+            "date": "2026-06-19",
+            "ndvi": 0.452
+          },
+          {
+            "date": "2026-07-03",
+            "ndvi": 0.311
+          },
+          {
+            "date": "2026-07-17",
+            "ndvi": 0.268
+          },
+          {
+            "date": "2026-07-31",
+            "ndvi": 0.301
+          },
+          {
+            "date": "2026-08-14",
+            "ndvi": 0.196
+          },
+          {
+            "date": "2026-08-28",
+            "ndvi": 0.225
+          }
+        ]
+      }
+    },
+    "live": {
+      "weather": true,
+      "sentinel_ndvi": true,
+      "metadata": false
+    },
+    "sources": [
+      "Open-Meteo forecast"
+    ]
+  },
+  {
+    "id": "0a27068fdcc54d71baaa0b0e4e62c6bb",
+    "created_at": "2026-09-14T12:31:19.321962+00:00",
+    "farm": {
+      "farm_name": "Test Farm",
+      "latitude": -1.0671,
+      "longitude": 34.4788,
+      "farm_size": null,
+      "farm_unit": "Acres",
+      "crop": "maize",
+      "variety": null,
+      "planting_date": "2026-06-01",
+      "harvest_date": null,
+      "soil": null,
+      "drainage": null,
+      "flood_history": null,
+      "slope": null,
+      "health": null,
+      "problems": [],
+      "noticed": null,
+      "use_ai": true
+    },
+    "risk": {
+      "score": 30,
+      "title": "LOW",
+      "drought": 30,
+      "flood": 5,
+      "crop_stress": 26,
+      "reasons": [],
+      "actions": [
+        "Walk the field along a simple zig-zag route and check 10–20 plants for changes.",
+        "Record a photo from the same spot each week so changes can be compared over time."
+      ],
+      "weather": {
+        "live": true,
+        "source": "Open-Meteo forecast",
+        "rain7_mm": 25.6,
+        "max_temp_7d_c": 31.0,
+        "wet_days_7d": 2,
+        "heavy_rain_days_7d": 0,
+        "drought_risk": 30,
+        "flood_risk": 5,
+        "series": [
+          {
+            "date": "2026-09-14",
+            "rain": 4.8,
+            "temp": 28.6,
+            "prob": 100,
+            "soil_moisture": 0.1499
+          },
+          {
+            "date": "2026-09-15",
+            "rain": 3.5,
+            "temp": 31.0,
+            "prob": 100,
+            "soil_moisture": 0.1327
+          },
+          {
+            "date": "2026-09-16",
+            "rain": 5.4,
+            "temp": 30.6,
+            "prob": 95,
+            "soil_moisture": 0.1225
+          },
+          {
+            "date": "2026-09-17",
+            "rain": 10.1,
+            "temp": 28.8,
+            "prob": 92,
+            "soil_moisture": 0.1297
+          },
+          {
+            "date": "2026-09-18",
+            "rain": 0.3,
+            "temp": 28.4,
+            "prob": 71,
+            "soil_moisture": 0.1173
+          },
+          {
+            "date": "2026-09-19",
+            "rain": 0.3,
+            "temp": 28.1,
+            "prob": 53,
+            "soil_moisture": 0.1165
+          },
+          {
+            "date": "2026-09-20",
+            "rain": 1.2,
+            "temp": 29.2,
+            "prob": 42,
+            "soil_moisture": 0.1061
+          },
+          {
+            "date": "2026-09-21",
+            "rain": 1.8,
+            "temp": 24.3,
+            "prob": 85,
+            "soil_moisture": 0.0967
+          },
+          {
+            "date": "2026-09-22",
+            "rain": 2.0,
+            "temp": 25.8,
+            "prob": 80,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-23",
+            "rain": 3.4,
+            "temp": 25.8,
+            "prob": 77,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-24",
+            "rain": 0.0,
+            "temp": 27.6,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-25",
+            "rain": 0.0,
+            "temp": 27.1,
+            "prob": 19,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-26",
+            "rain": 3.0,
+            "temp": 25.5,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-27",
+            "rain": 0.6,
+            "temp": 29.8,
+            "prob": 43,
+            "soil_moisture": null
+          }
+        ]
+      },
+      "ndvi_trend": "not available",
+      "monitoring_window": "default local window",
+      "headline": "LOW",
+      "explanation": "The score combines the weather outlook, your reported field conditions and—when configured—Sentinel-2 vegetation information.",
+      "watch_next": [
+        "Recheck after the next heavy rainfall or 3–5 dry days.",
+        "Compare the same field location over time."
+      ]
+    },
+    "satellite": {
+      "available": true,
+      "scenes": [
+        {
+          "id": "S2B_MSIL2A_20260907T074609_N0512_R135_T36MXD_20260907T101559",
+          "datetime": "2026-09-07T07:46:09.024000Z",
+          "cloud_cover": 0.18
+        },
+        {
+          "id": "S2A_MSIL2A_20260904T080451_N0512_R135_T36MXD_20260904T130611",
+          "datetime": "2026-09-04T08:04:51.024000Z",
+          "cloud_cover": 11.18
+        },
+        {
+          "id": "S2C_MSIL2A_20260902T074611_N0512_R135_T36MXD_20260902T113210",
+          "datetime": "2026-09-02T07:46:11.025000Z",
+          "cloud_cover": 1.14
+        },
+        {
+          "id": "S2B_MSIL2A_20260828T074609_N0512_R135_T36MXD_20260828T101512",
+          "datetime": "2026-08-28T07:46:09.024000Z",
+          "cloud_cover": 0.0
+        },
+        {
+          "id": "S2A_MSIL2A_20260825T075021_N0512_R135_T36MXD_20260825T144215",
+          "datetime": "2026-08-25T07:50:21.024000Z",
+          "cloud_cover": 7.48
+        }
+      ],
+      "source": "CDSE STAC",
+      "ndvi": {
+        "available": false,
+        "status": "error",
+        "series": [],
+        "reason": "Client error '401 Unauthorized' for url 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    },
+    "live": {
+      "weather": true,
+      "sentinel_ndvi": false,
+      "metadata": true
+    },
+    "sources": [
+      "Open-Meteo forecast"
+    ]
+  },
+  {
+    "id": "6ca53d36bc5a4519b8e71d7a265ddec8",
+    "created_at": "2026-09-14T12:31:48.635470+00:00",
+    "farm": {
+      "farm_name": "Test Farm",
+      "latitude": -1.0671,
+      "longitude": 34.4788,
+      "farm_size": null,
+      "farm_unit": "Acres",
+      "crop": "maize",
+      "variety": null,
+      "planting_date": "2026-06-01",
+      "harvest_date": null,
+      "soil": null,
+      "drainage": null,
+      "flood_history": null,
+      "slope": null,
+      "health": null,
+      "problems": [],
+      "noticed": null,
+      "use_ai": true
+    },
+    "risk": {
+      "score": 30,
+      "title": "LOW",
+      "drought": 30,
+      "flood": 5,
+      "crop_stress": 26,
+      "reasons": [],
+      "actions": [
+        "Walk the field along a simple zig-zag route and check 10–20 plants for changes.",
+        "Record a photo from the same spot each week so changes can be compared over time."
+      ],
+      "weather": {
+        "live": true,
+        "source": "Open-Meteo forecast",
+        "rain7_mm": 25.6,
+        "max_temp_7d_c": 31.0,
+        "wet_days_7d": 2,
+        "heavy_rain_days_7d": 0,
+        "drought_risk": 30,
+        "flood_risk": 5,
+        "series": [
+          {
+            "date": "2026-09-14",
+            "rain": 4.8,
+            "temp": 28.6,
+            "prob": 100,
+            "soil_moisture": 0.1499
+          },
+          {
+            "date": "2026-09-15",
+            "rain": 3.5,
+            "temp": 31.0,
+            "prob": 100,
+            "soil_moisture": 0.1327
+          },
+          {
+            "date": "2026-09-16",
+            "rain": 5.4,
+            "temp": 30.6,
+            "prob": 95,
+            "soil_moisture": 0.1225
+          },
+          {
+            "date": "2026-09-17",
+            "rain": 10.1,
+            "temp": 28.8,
+            "prob": 92,
+            "soil_moisture": 0.1297
+          },
+          {
+            "date": "2026-09-18",
+            "rain": 0.3,
+            "temp": 28.4,
+            "prob": 71,
+            "soil_moisture": 0.1173
+          },
+          {
+            "date": "2026-09-19",
+            "rain": 0.3,
+            "temp": 28.1,
+            "prob": 53,
+            "soil_moisture": 0.1165
+          },
+          {
+            "date": "2026-09-20",
+            "rain": 1.2,
+            "temp": 29.2,
+            "prob": 42,
+            "soil_moisture": 0.1061
+          },
+          {
+            "date": "2026-09-21",
+            "rain": 1.8,
+            "temp": 24.3,
+            "prob": 85,
+            "soil_moisture": 0.0967
+          },
+          {
+            "date": "2026-09-22",
+            "rain": 2.0,
+            "temp": 25.8,
+            "prob": 80,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-23",
+            "rain": 3.4,
+            "temp": 25.8,
+            "prob": 77,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-24",
+            "rain": 0.0,
+            "temp": 27.6,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-25",
+            "rain": 0.0,
+            "temp": 27.1,
+            "prob": 19,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-26",
+            "rain": 3.0,
+            "temp": 25.5,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-27",
+            "rain": 0.6,
+            "temp": 29.8,
+            "prob": 43,
+            "soil_moisture": null
+          }
+        ]
+      },
+      "ndvi_trend": "not available",
+      "monitoring_window": "default local window",
+      "headline": "LOW",
+      "explanation": "The score combines the weather outlook, your reported field conditions and—when configured—Sentinel-2 vegetation information.",
+      "watch_next": [
+        "Recheck after the next heavy rainfall or 3–5 dry days.",
+        "Compare the same field location over time."
+      ]
+    },
+    "satellite": {
+      "available": true,
+      "scenes": [
+        {
+          "id": "S2B_MSIL2A_20260907T074609_N0512_R135_T36MXD_20260907T101559",
+          "datetime": "2026-09-07T07:46:09.024000Z",
+          "cloud_cover": 0.18
+        },
+        {
+          "id": "S2A_MSIL2A_20260904T080451_N0512_R135_T36MXD_20260904T130611",
+          "datetime": "2026-09-04T08:04:51.024000Z",
+          "cloud_cover": 11.18
+        },
+        {
+          "id": "S2C_MSIL2A_20260902T074611_N0512_R135_T36MXD_20260902T113210",
+          "datetime": "2026-09-02T07:46:11.025000Z",
+          "cloud_cover": 1.14
+        },
+        {
+          "id": "S2B_MSIL2A_20260828T074609_N0512_R135_T36MXD_20260828T101512",
+          "datetime": "2026-08-28T07:46:09.024000Z",
+          "cloud_cover": 0.0
+        },
+        {
+          "id": "S2A_MSIL2A_20260825T075021_N0512_R135_T36MXD_20260825T144215",
+          "datetime": "2026-08-25T07:50:21.024000Z",
+          "cloud_cover": 7.48
+        }
+      ],
+      "source": "CDSE STAC",
+      "ndvi": {
+        "available": false,
+        "status": "error",
+        "series": [],
+        "reason": "Client error '401 Unauthorized' for url 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    },
+    "live": {
+      "weather": true,
+      "sentinel_ndvi": false,
+      "metadata": true
+    },
+    "sources": [
+      "Open-Meteo forecast"
+    ]
+  },
+  {
+    "id": "eb107a9cf45c42b09d5b76ba08a8fd4c",
+    "created_at": "2026-09-14T12:32:13.494854+00:00",
+    "farm": {
+      "farm_name": "Test Farm",
+      "latitude": -1.0671,
+      "longitude": 34.4788,
+      "farm_size": null,
+      "farm_unit": "Acres",
+      "crop": "maize",
+      "variety": null,
+      "planting_date": "2026-06-01",
+      "harvest_date": null,
+      "soil": null,
+      "drainage": null,
+      "flood_history": null,
+      "slope": null,
+      "health": null,
+      "problems": [],
+      "noticed": null,
+      "use_ai": true
+    },
+    "risk": {
+      "score": 30,
+      "title": "LOW",
+      "drought": 30,
+      "flood": 5,
+      "crop_stress": 26,
+      "reasons": [],
+      "actions": [
+        "Walk the field along a simple zig-zag route and check 10–20 plants for changes.",
+        "Record a photo from the same spot each week so changes can be compared over time."
+      ],
+      "weather": {
+        "live": true,
+        "source": "Open-Meteo forecast",
+        "rain7_mm": 25.6,
+        "max_temp_7d_c": 31.0,
+        "wet_days_7d": 2,
+        "heavy_rain_days_7d": 0,
+        "drought_risk": 30,
+        "flood_risk": 5,
+        "series": [
+          {
+            "date": "2026-09-14",
+            "rain": 4.8,
+            "temp": 28.6,
+            "prob": 100,
+            "soil_moisture": 0.1499
+          },
+          {
+            "date": "2026-09-15",
+            "rain": 3.5,
+            "temp": 31.0,
+            "prob": 100,
+            "soil_moisture": 0.1327
+          },
+          {
+            "date": "2026-09-16",
+            "rain": 5.4,
+            "temp": 30.6,
+            "prob": 95,
+            "soil_moisture": 0.1225
+          },
+          {
+            "date": "2026-09-17",
+            "rain": 10.1,
+            "temp": 28.8,
+            "prob": 92,
+            "soil_moisture": 0.1297
+          },
+          {
+            "date": "2026-09-18",
+            "rain": 0.3,
+            "temp": 28.4,
+            "prob": 71,
+            "soil_moisture": 0.1173
+          },
+          {
+            "date": "2026-09-19",
+            "rain": 0.3,
+            "temp": 28.1,
+            "prob": 53,
+            "soil_moisture": 0.1165
+          },
+          {
+            "date": "2026-09-20",
+            "rain": 1.2,
+            "temp": 29.2,
+            "prob": 42,
+            "soil_moisture": 0.1061
+          },
+          {
+            "date": "2026-09-21",
+            "rain": 1.8,
+            "temp": 24.3,
+            "prob": 85,
+            "soil_moisture": 0.0967
+          },
+          {
+            "date": "2026-09-22",
+            "rain": 2.0,
+            "temp": 25.8,
+            "prob": 80,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-23",
+            "rain": 3.4,
+            "temp": 25.8,
+            "prob": 77,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-24",
+            "rain": 0.0,
+            "temp": 27.6,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-25",
+            "rain": 0.0,
+            "temp": 27.1,
+            "prob": 19,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-26",
+            "rain": 3.0,
+            "temp": 25.5,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-27",
+            "rain": 0.6,
+            "temp": 29.8,
+            "prob": 43,
+            "soil_moisture": null
+          }
+        ]
+      },
+      "ndvi_trend": "not available",
+      "monitoring_window": "default local window",
+      "headline": "LOW",
+      "explanation": "The score combines the weather outlook, your reported field conditions and—when configured—Sentinel-2 vegetation information.",
+      "watch_next": [
+        "Recheck after the next heavy rainfall or 3–5 dry days.",
+        "Compare the same field location over time."
+      ]
+    },
+    "satellite": {
+      "available": true,
+      "scenes": [
+        {
+          "id": "S2B_MSIL2A_20260907T074609_N0512_R135_T36MXD_20260907T101559",
+          "datetime": "2026-09-07T07:46:09.024000Z",
+          "cloud_cover": 0.18
+        },
+        {
+          "id": "S2A_MSIL2A_20260904T080451_N0512_R135_T36MXD_20260904T130611",
+          "datetime": "2026-09-04T08:04:51.024000Z",
+          "cloud_cover": 11.18
+        },
+        {
+          "id": "S2C_MSIL2A_20260902T074611_N0512_R135_T36MXD_20260902T113210",
+          "datetime": "2026-09-02T07:46:11.025000Z",
+          "cloud_cover": 1.14
+        },
+        {
+          "id": "S2B_MSIL2A_20260828T074609_N0512_R135_T36MXD_20260828T101512",
+          "datetime": "2026-08-28T07:46:09.024000Z",
+          "cloud_cover": 0.0
+        },
+        {
+          "id": "S2A_MSIL2A_20260825T075021_N0512_R135_T36MXD_20260825T144215",
+          "datetime": "2026-08-25T07:50:21.024000Z",
+          "cloud_cover": 7.48
+        }
+      ],
+      "source": "CDSE STAC",
+      "ndvi": {
+        "available": false,
+        "status": "error",
+        "series": [],
+        "reason": "Client error '401 Unauthorized' for url 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    },
+    "live": {
+      "weather": true,
+      "sentinel_ndvi": false,
+      "metadata": true
+    },
+    "sources": [
+      "Open-Meteo forecast"
+    ]
+  },
+  {
+    "id": "07a0f6ac1f654bf7bdfd15993b849d5a",
+    "created_at": "2026-09-14T12:35:18.926443+00:00",
+    "farm": {
+      "farm_name": "Test Farm",
+      "latitude": -1.0671,
+      "longitude": 34.4788,
+      "farm_size": null,
+      "farm_unit": "Acres",
+      "crop": "maize",
+      "variety": null,
+      "planting_date": "2026-06-01",
+      "harvest_date": null,
+      "soil": null,
+      "drainage": null,
+      "flood_history": null,
+      "slope": null,
+      "health": null,
+      "problems": [],
+      "noticed": null,
+      "use_ai": true
+    },
+    "risk": {
+      "score": 30,
+      "title": "LOW",
+      "drought": 30,
+      "flood": 5,
+      "crop_stress": 26,
+      "reasons": [],
+      "actions": [
+        "Walk the field along a simple zig-zag route and check 10–20 plants for changes.",
+        "Record a photo from the same spot each week so changes can be compared over time."
+      ],
+      "weather": {
+        "live": true,
+        "source": "Open-Meteo forecast",
+        "rain7_mm": 25.6,
+        "max_temp_7d_c": 31.0,
+        "wet_days_7d": 2,
+        "heavy_rain_days_7d": 0,
+        "drought_risk": 30,
+        "flood_risk": 5,
+        "series": [
+          {
+            "date": "2026-09-14",
+            "rain": 4.8,
+            "temp": 28.6,
+            "prob": 100,
+            "soil_moisture": 0.1499
+          },
+          {
+            "date": "2026-09-15",
+            "rain": 3.5,
+            "temp": 31.0,
+            "prob": 100,
+            "soil_moisture": 0.1327
+          },
+          {
+            "date": "2026-09-16",
+            "rain": 5.4,
+            "temp": 30.6,
+            "prob": 95,
+            "soil_moisture": 0.1225
+          },
+          {
+            "date": "2026-09-17",
+            "rain": 10.1,
+            "temp": 28.8,
+            "prob": 92,
+            "soil_moisture": 0.1297
+          },
+          {
+            "date": "2026-09-18",
+            "rain": 0.3,
+            "temp": 28.4,
+            "prob": 71,
+            "soil_moisture": 0.1173
+          },
+          {
+            "date": "2026-09-19",
+            "rain": 0.3,
+            "temp": 28.1,
+            "prob": 53,
+            "soil_moisture": 0.1165
+          },
+          {
+            "date": "2026-09-20",
+            "rain": 1.2,
+            "temp": 29.2,
+            "prob": 42,
+            "soil_moisture": 0.1061
+          },
+          {
+            "date": "2026-09-21",
+            "rain": 1.8,
+            "temp": 24.3,
+            "prob": 85,
+            "soil_moisture": 0.0967
+          },
+          {
+            "date": "2026-09-22",
+            "rain": 2.0,
+            "temp": 25.8,
+            "prob": 80,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-23",
+            "rain": 3.4,
+            "temp": 25.8,
+            "prob": 77,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-24",
+            "rain": 0.0,
+            "temp": 27.6,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-25",
+            "rain": 0.0,
+            "temp": 27.1,
+            "prob": 19,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-26",
+            "rain": 3.0,
+            "temp": 25.5,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-27",
+            "rain": 0.6,
+            "temp": 29.8,
+            "prob": 43,
+            "soil_moisture": null
+          }
+        ]
+      },
+      "ndvi_trend": "not available",
+      "monitoring_window": "default local window",
+      "headline": "LOW",
+      "explanation": "The score combines the weather outlook, your reported field conditions and—when configured—Sentinel-2 vegetation information.",
+      "watch_next": [
+        "Recheck after the next heavy rainfall or 3–5 dry days.",
+        "Compare the same field location over time."
+      ]
+    },
+    "satellite": {
+      "available": true,
+      "scenes": [
+        {
+          "id": "S2B_MSIL2A_20260907T074609_N0512_R135_T36MXD_20260907T101559",
+          "datetime": "2026-09-07T07:46:09.024000Z",
+          "cloud_cover": 0.18
+        },
+        {
+          "id": "S2A_MSIL2A_20260904T080451_N0512_R135_T36MXD_20260904T130611",
+          "datetime": "2026-09-04T08:04:51.024000Z",
+          "cloud_cover": 11.18
+        },
+        {
+          "id": "S2C_MSIL2A_20260902T074611_N0512_R135_T36MXD_20260902T113210",
+          "datetime": "2026-09-02T07:46:11.025000Z",
+          "cloud_cover": 1.14
+        },
+        {
+          "id": "S2B_MSIL2A_20260828T074609_N0512_R135_T36MXD_20260828T101512",
+          "datetime": "2026-08-28T07:46:09.024000Z",
+          "cloud_cover": 0.0
+        },
+        {
+          "id": "S2A_MSIL2A_20260825T075021_N0512_R135_T36MXD_20260825T144215",
+          "datetime": "2026-08-25T07:50:21.024000Z",
+          "cloud_cover": 7.48
+        }
+      ],
+      "source": "CDSE STAC",
+      "ndvi": {
+        "available": false,
+        "status": "error",
+        "series": [],
+        "reason": "Client error '401 Unauthorized' for url 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    },
+    "live": {
+      "weather": true,
+      "sentinel_ndvi": false,
+      "metadata": true
+    },
+    "sources": [
+      "Open-Meteo forecast"
+    ]
+  },
+  {
+    "id": "0fbb04ca43e540aabdc4c2ac2674db14",
+    "created_at": "2026-09-14T12:41:48.691092+00:00",
+    "farm": {
+      "farm_name": "infinitetest",
+      "latitude": -1.0671499,
+      "longitude": 34.4787757,
+      "farm_size": 1.0,
+      "farm_unit": "Hectares",
+      "crop": "maize",
+      "variety": "cccc",
+      "planting_date": "2026-01-02",
+      "harvest_date": "2027-07-03",
+      "soil": null,
+      "drainage": null,
+      "flood_history": null,
+      "slope": null,
+      "health": null,
+      "problems": [],
+      "noticed": "Today",
+      "use_ai": true
+    },
+    "risk": {
+      "score": 55,
+      "title": "MODERATE",
+      "drought": 30,
+      "flood": 5,
+      "crop_stress": 47,
+      "reasons": [
+        "recent Sentinel-2 NDVI is low (0.23)",
+        "vegetation vigor is falling across the available Sentinel-2 observations"
+      ],
+      "actions": [
+        "Walk the low-vigor parts of the field first and compare them with a healthy patch.",
+        "Remove weeds manually to reduce competition for soil moisture.",
+        "Apply local dry plant material or mulch around plant bases to retain soil water."
+      ],
+      "weather": {
+        "live": true,
+        "source": "Open-Meteo forecast",
+        "rain7_mm": 25.6,
+        "max_temp_7d_c": 31.0,
+        "wet_days_7d": 2,
+        "heavy_rain_days_7d": 0,
+        "drought_risk": 30,
+        "flood_risk": 5,
+        "series": [
+          {
+            "date": "2026-09-14",
+            "rain": 4.8,
+            "temp": 28.6,
+            "prob": 100,
+            "soil_moisture": 0.1499
+          },
+          {
+            "date": "2026-09-15",
+            "rain": 3.5,
+            "temp": 31.0,
+            "prob": 100,
+            "soil_moisture": 0.1327
+          },
+          {
+            "date": "2026-09-16",
+            "rain": 5.4,
+            "temp": 30.6,
+            "prob": 95,
+            "soil_moisture": 0.1225
+          },
+          {
+            "date": "2026-09-17",
+            "rain": 10.1,
+            "temp": 28.8,
+            "prob": 92,
+            "soil_moisture": 0.1297
+          },
+          {
+            "date": "2026-09-18",
+            "rain": 0.3,
+            "temp": 28.4,
+            "prob": 71,
+            "soil_moisture": 0.1173
+          },
+          {
+            "date": "2026-09-19",
+            "rain": 0.3,
+            "temp": 28.1,
+            "prob": 53,
+            "soil_moisture": 0.1165
+          },
+          {
+            "date": "2026-09-20",
+            "rain": 1.2,
+            "temp": 29.2,
+            "prob": 42,
+            "soil_moisture": 0.1061
+          },
+          {
+            "date": "2026-09-21",
+            "rain": 1.8,
+            "temp": 24.3,
+            "prob": 85,
+            "soil_moisture": 0.0967
+          },
+          {
+            "date": "2026-09-22",
+            "rain": 2.0,
+            "temp": 25.8,
+            "prob": 80,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-23",
+            "rain": 3.4,
+            "temp": 25.8,
+            "prob": 77,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-24",
+            "rain": 0.0,
+            "temp": 27.6,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-25",
+            "rain": 0.0,
+            "temp": 27.1,
+            "prob": 19,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-26",
+            "rain": 3.0,
+            "temp": 25.5,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-27",
+            "rain": 0.6,
+            "temp": 29.8,
+            "prob": 43,
+            "soil_moisture": null
+          }
+        ]
+      },
+      "ndvi_trend": "falling",
+      "monitoring_window": "farm-size-derived",
+      "headline": "Moderate crop stress detected with falling vegetation vigor",
+      "explanation": "Observed satellite data shows your maize vigor (NDVI) dropped to 0.225 on August 28, 2026. Weather data shows 25.6 mm of rain expected in the next 7 days, with temperatures reaching 31.0°C and daily soil moisture dropping below 0.10. We interpret these numbers as moderate crop stress caused by falling soil moisture.",
+      "watch_next": [
+        "Watch for leaf wilting or yellowing during days with temperatures up to 31.0°C.",
+        "Track soil dryness after the expected 25.6 mm of rainfall finishes."
+      ]
+    },
+    "satellite": {
+      "available": true,
+      "scenes": [
+        {
+          "id": "S2B_MSIL2A_20260907T074609_N0512_R135_T36MXD_20260907T101559",
+          "datetime": "2026-09-07T07:46:09.024000Z",
+          "cloud_cover": 0.18
+        },
+        {
+          "id": "S2A_MSIL2A_20260904T080451_N0512_R135_T36MXD_20260904T130611",
+          "datetime": "2026-09-04T08:04:51.024000Z",
+          "cloud_cover": 11.18
+        },
+        {
+          "id": "S2C_MSIL2A_20260902T074611_N0512_R135_T36MXD_20260902T113210",
+          "datetime": "2026-09-02T07:46:11.025000Z",
+          "cloud_cover": 1.14
+        },
+        {
+          "id": "S2B_MSIL2A_20260828T074609_N0512_R135_T36MXD_20260828T101512",
+          "datetime": "2026-08-28T07:46:09.024000Z",
+          "cloud_cover": 0.0
+        },
+        {
+          "id": "S2A_MSIL2A_20260825T075021_N0512_R135_T36MXD_20260825T144215",
+          "datetime": "2026-08-25T07:50:21.024000Z",
+          "cloud_cover": 7.48
+        }
+      ],
+      "source": "CDSE STAC",
+      "ndvi": {
+        "available": true,
+        "status": "ok",
+        "series": [
+          {
+            "date": "2026-01-02",
+            "ndvi": 0.469
+          },
+          {
+            "date": "2026-01-16",
+            "ndvi": 0.446
+          },
+          {
+            "date": "2026-01-30",
+            "ndvi": 0.401
+          },
+          {
+            "date": "2026-02-13",
+            "ndvi": 1.0
+          },
+          {
+            "date": "2026-02-27",
+            "ndvi": -0.004
+          },
+          {
+            "date": "2026-03-13",
+            "ndvi": 0.298
+          },
+          {
+            "date": "2026-03-27",
+            "ndvi": 0.72
+          },
+          {
+            "date": "2026-04-10",
+            "ndvi": 0.394
+          },
+          {
+            "date": "2026-04-24",
+            "ndvi": 0.503
+          },
+          {
+            "date": "2026-05-08",
+            "ndvi": 0.553
+          },
+          {
+            "date": "2026-05-22",
+            "ndvi": 0.533
+          },
+          {
+            "date": "2026-06-05",
+            "ndvi": 0.479
+          },
+          {
+            "date": "2026-06-19",
+            "ndvi": 0.452
+          },
+          {
+            "date": "2026-07-03",
+            "ndvi": 0.311
+          },
+          {
+            "date": "2026-07-17",
+            "ndvi": 0.268
+          },
+          {
+            "date": "2026-07-31",
+            "ndvi": 0.301
+          },
+          {
+            "date": "2026-08-14",
+            "ndvi": 0.196
+          },
+          {
+            "date": "2026-08-28",
+            "ndvi": 0.225
+          }
+        ]
+      }
+    },
+    "live": {
+      "weather": true,
+      "sentinel_ndvi": true,
+      "metadata": true
+    },
+    "sources": [
+      "Open-Meteo forecast"
+    ]
+  },
+  {
+    "id": "e02d40f7ecdd4a859cebe4a56b420a25",
+    "created_at": "2026-09-14T12:47:17.551681+00:00",
+    "farm": {
+      "farm_name": "infinitetest",
+      "latitude": -1.0671499,
+      "longitude": 34.4787757,
+      "farm_size": 1.0,
+      "farm_unit": "Hectares",
+      "crop": "maize",
+      "variety": "cccc",
+      "planting_date": "2026-01-02",
+      "harvest_date": "2027-07-03",
+      "soil": null,
+      "drainage": null,
+      "flood_history": null,
+      "slope": null,
+      "health": null,
+      "problems": [],
+      "noticed": "Today",
+      "use_ai": true
+    },
+    "risk": {
+      "score": 55,
+      "title": "MODERATE",
+      "drought": 30,
+      "flood": 5,
+      "crop_stress": 47,
+      "reasons": [
+        "recent Sentinel-2 NDVI is low (0.23)",
+        "vegetation vigor is falling across the available Sentinel-2 observations"
+      ],
+      "actions": [
+        "Walk the low-vigor part of the field first and compare it with a healthy patch.",
+        "Spread dry grass or crop leaves around maize plants as mulch to trap soil moisture.",
+        "Remove weeds immediately so they do not compete with the crop for water."
+      ],
+      "weather": {
+        "live": true,
+        "source": "Open-Meteo forecast",
+        "rain7_mm": 25.6,
+        "max_temp_7d_c": 31.0,
+        "wet_days_7d": 2,
+        "heavy_rain_days_7d": 0,
+        "drought_risk": 30,
+        "flood_risk": 5,
+        "series": [
+          {
+            "date": "2026-09-14",
+            "rain": 4.8,
+            "temp": 28.6,
+            "prob": 100,
+            "soil_moisture": 0.1499
+          },
+          {
+            "date": "2026-09-15",
+            "rain": 3.5,
+            "temp": 31.0,
+            "prob": 100,
+            "soil_moisture": 0.1327
+          },
+          {
+            "date": "2026-09-16",
+            "rain": 5.4,
+            "temp": 30.6,
+            "prob": 95,
+            "soil_moisture": 0.1225
+          },
+          {
+            "date": "2026-09-17",
+            "rain": 10.1,
+            "temp": 28.8,
+            "prob": 92,
+            "soil_moisture": 0.1297
+          },
+          {
+            "date": "2026-09-18",
+            "rain": 0.3,
+            "temp": 28.4,
+            "prob": 71,
+            "soil_moisture": 0.1173
+          },
+          {
+            "date": "2026-09-19",
+            "rain": 0.3,
+            "temp": 28.1,
+            "prob": 53,
+            "soil_moisture": 0.1165
+          },
+          {
+            "date": "2026-09-20",
+            "rain": 1.2,
+            "temp": 29.2,
+            "prob": 42,
+            "soil_moisture": 0.1061
+          },
+          {
+            "date": "2026-09-21",
+            "rain": 1.8,
+            "temp": 24.3,
+            "prob": 85,
+            "soil_moisture": 0.0967
+          },
+          {
+            "date": "2026-09-22",
+            "rain": 2.0,
+            "temp": 25.8,
+            "prob": 80,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-23",
+            "rain": 3.4,
+            "temp": 25.8,
+            "prob": 77,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-24",
+            "rain": 0.0,
+            "temp": 27.6,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-25",
+            "rain": 0.0,
+            "temp": 27.1,
+            "prob": 19,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-26",
+            "rain": 3.0,
+            "temp": 25.5,
+            "prob": 41,
+            "soil_moisture": null
+          },
+          {
+            "date": "2026-09-27",
+            "rain": 0.6,
+            "temp": 29.8,
+            "prob": 43,
+            "soil_moisture": null
+          }
+        ]
+      },
+      "ndvi_trend": "falling",
+      "monitoring_window": "farm-size-derived",
+      "headline": "Moderate Crop Stress Detected with Falling Plant Vigor",
+      "explanation": "Observed satellite data shows NDVI dropped to 0.23, which indicates declining plant health. Forecasted weather shows 25.6 mm of rain over the next 7 days, but soil moisture is dropping from 0.15 to 0.10. This interpretation suggests the maize is experiencing moisture stress.",
+      "watch_next": [
+        "Check leaves for wilting or rolling during the 31.0°C daily heat peaks.",
+        "Monitor if expected rainfall on September 17 arrives as forecasted."
+      ]
+    },
+    "satellite": {
+      "available": true,
+      "scenes": [
+        {
+          "id": "S2B_MSIL2A_20260907T074609_N0512_R135_T36MXD_20260907T101559",
+          "datetime": "2026-09-07T07:46:09.024000Z",
+          "cloud_cover": 0.18
+        },
+        {
+          "id": "S2A_MSIL2A_20260904T080451_N0512_R135_T36MXD_20260904T130611",
+          "datetime": "2026-09-04T08:04:51.024000Z",
+          "cloud_cover": 11.18
+        },
+        {
+          "id": "S2C_MSIL2A_20260902T074611_N0512_R135_T36MXD_20260902T113210",
+          "datetime": "2026-09-02T07:46:11.025000Z",
+          "cloud_cover": 1.14
+        },
+        {
+          "id": "S2B_MSIL2A_20260828T074609_N0512_R135_T36MXD_20260828T101512",
+          "datetime": "2026-08-28T07:46:09.024000Z",
+          "cloud_cover": 0.0
+        },
+        {
+          "id": "S2A_MSIL2A_20260825T075021_N0512_R135_T36MXD_20260825T144215",
+          "datetime": "2026-08-25T07:50:21.024000Z",
+          "cloud_cover": 7.48
+        }
+      ],
+      "source": "CDSE STAC",
+      "ndvi": {
+        "available": true,
+        "status": "ok",
+        "series": [
+          {
+            "date": "2026-01-02",
+            "ndvi": 0.469
+          },
+          {
+            "date": "2026-01-16",
+            "ndvi": 0.446
+          },
+          {
+            "date": "2026-01-30",
+            "ndvi": 0.401
+          },
+          {
+            "date": "2026-02-13",
+            "ndvi": 1.0
+          },
+          {
+            "date": "2026-02-27",
+            "ndvi": -0.004
+          },
+          {
+            "date": "2026-03-13",
+            "ndvi": 0.298
+          },
+          {
+            "date": "2026-03-27",
+            "ndvi": 0.72
+          },
+          {
+            "date": "2026-04-10",
+            "ndvi": 0.394
+          },
+          {
+            "date": "2026-04-24",
+            "ndvi": 0.503
+          },
+          {
+            "date": "2026-05-08",
+            "ndvi": 0.553
+          },
+          {
+            "date": "2026-05-22",
+            "ndvi": 0.533
+          },
+          {
+            "date": "2026-06-05",
+            "ndvi": 0.479
+          },
+          {
+            "date": "2026-06-19",
+            "ndvi": 0.452
+          },
+          {
+            "date": "2026-07-03",
+            "ndvi": 0.311
+          },
+          {
+            "date": "2026-07-17",
+            "ndvi": 0.268
+          },
+          {
+            "date": "2026-07-31",
+            "ndvi": 0.301
+          },
+          {
+            "date": "2026-08-14",
+            "ndvi": 0.196
+          },
+          {
+            "date": "2026-08-28",
+            "ndvi": 0.225
+          }
+        ]
+      }
+    },
+    "live": {
+      "weather": true,
+      "sentinel_ndvi": true,
+      "metadata": true
+    },
+    "sources": [
+      "Open-Meteo forecast"
+    ]
+  }
+]

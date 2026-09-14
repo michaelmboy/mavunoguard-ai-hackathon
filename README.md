@@ -1,23 +1,38 @@
 # MavunoGuard AI
 
-**MavunoGuard AI: An AI-Powered Climate Risk and Crop Advisory System for Smallholder Farmers.**
+**MavunoGuard AI: An Enterprise-Grade AI-Powered Climate Risk and Crop Advisory System for Smallholder Farmers.**
 
-This version keeps the existing farm assessment, GPS/Leaflet map, risk scoring, charts, optional AI layer and offline fallback, while repairing the live-data pipeline and adding Chrome PWA install capabilities as well as user authentication (Registration, Login, and Google OAuth).
+MavunoGuard is a robust, scalable decision-support platform designed to protect harvests and empower farmers with data-driven insights. Moving beyond prototype capabilities, this system incorporates enterprise-grade integrations including Gemini AI for tailored agronomic insights, Supabase for scalable cloud data management, and Copernicus Sentinel-2 satellite data for vegetation health tracking. 
 
-## Features & PWA Capabilities
+## Key Features & Enterprise Capabilities
 
-- **Chrome PWA Install Support:** Web App Manifest and service worker enabled for installation to desktop and mobile home screens, including a custom installation prompt banner and header button.
-- **User Authentication:** Support for traditional username/password registration and login (PBKDF2 password hashing) alongside Google OAuth 2.0 integration.
-- **Weather:** Open-Meteo `/v1/forecast` using the farm latitude/longitude. No API key is required.
-- **Satellite discovery:** Copernicus Data Space public STAC search for recent Sentinel-2 L2A scenes.
-- **NDVI:** Copernicus Data Space Sentinel Hub Statistical API using Sentinel-2 L2A B04/B08 and an authenticated OAuth client.
-- **Frontend:** HTML/CSS/JavaScript with Leaflet and SVG charts.
-- **Backend:** FastAPI + httpx.
-- **Deployment:** GitHub → Render.
+- **AI-Powered Diagnostics:** Leverages the **Google Gemini API** (`gemini-3.6-flash`) to generate concise, localized, and actionable advice from complex weather and satellite data. Falls back seamlessly if offline or if upstream APIs degrade.
+- **Scalable Architecture:** A modular FastAPI backend designed for high concurrency. Data persistence is decoupled, ready to utilize **Supabase** (PostgreSQL) for large-scale distributed deployments alongside a fallback to local JSON storage for edge environments.
+- **Advanced Satellite Integration (Sentinel-2):** Integrates directly with the Copernicus Data Space public STAC search for Sentinel-2 L2A scenes, processing NDVI (Normalized Difference Vegetation Index) locally to monitor crop stress dynamically.
+- **Robust Weather Forecasting:** Primary integration with Open-Meteo for 14-day forecasts (including soil moisture tracking), with an independent, automatic failover to MET Norway to guarantee uptime.
+- **Offline-First Progressive Web App (PWA):** Built for the realities of rural connectivity. The HTML/CSS/JavaScript frontend is fully installable on mobile devices. If a connection drops, the system transitions to an "Offline farm check" utilizing locally captured rules and GPS parameters, synchronizing once back online.
+- **Security & Authentication:** Multi-layered authentication via **Supabase Auth** — email/password sign-up & login and Google OAuth 2.0 (One Tap). Supabase issues signed JWTs; the backend validates them server-side via `supabase.auth.get_user()`. No passwords are stored or hashed by the application. Secrets and API keys are strictly managed via environment variables.
 
-Open-Meteo supports forecasts up to 16 days, including daily precipitation, temperature and precipitation probability. MavunoGuard requests 14 days and also requests hourly 0–1 cm soil moisture, which is aggregated into daily values when available.
+## Real-World Problem Solving
 
-## Local run
+MavunoGuard is designed for the genuine conditions faced by smallholders:
+1. **Connectivity is fragile:** The offline-first architecture ensures that field workers and farmers can record observations and receive baseline risk scores even without a signal.
+2. **Data must be actionable, not just visible:** Instead of presenting raw charts, the Gemini AI engine interprets the data and delivers clear, actionable tasks (e.g., "Check soil moisture 5-10 cm below the surface").
+3. **Hardware constraints:** The frontend is extremely lightweight, heavily optimized for performance on low-end mobile devices without requiring large framework payloads. 
+
+## Project Structure
+
+The backend has been modularized for real-world scaling:
+- `server/app.py`: Main FastAPI entry point and route definitions.
+- `server/routers/auth.py`: Authentication workflows (JWT/session management).
+- `server/services/ai.py`: Gemini/OpenAI integration and prompt engineering.
+- `server/services/satellite.py`: Copernicus OAuth and STAC/NDVI statistical processing.
+- `server/services/weather.py`: Multi-provider weather aggregation and failovers.
+- `server/services/analysis.py`: Agronomic rule engine and geospatial parsing (GPX/KML/EXIF).
+- `server/models.py`: Pydantic schemas for strict data validation.
+- `server/db.py`: Database interfaces bridging Supabase and local edge-storage.
+
+## Local Run Instructions
 
 ```bash
 python -m venv .venv
@@ -30,12 +45,18 @@ Open `http://127.0.0.1:8000`.
 
 ## Environment Variables Configuration
 
-Copy `.env.example` (or set these environment variables in your deployment platform like Render):
+Copy `.env.example` to `.env` and provide your API keys. 
 
 ```bash
-# Optional AI Integration
-OPENAI_API_KEY=your_openai_api_key
-OPENAI_MODEL=gpt-4o-mini
+# AI Integration (Primary: Gemini, Fallback: OpenAI)
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-2.5-flash
+
+# Supabase Integration
+# Find these in: Supabase Dashboard → Project Settings → API
+SUPABASE_URL=your_supabase_project_url       # e.g. https://xyzxyz.supabase.co
+SUPABASE_KEY=your_supabase_anon_key          # "anon public" key
+SUPABASE_JWT_SECRET=your_supabase_jwt_secret # Project Settings → API → JWT Secret
 
 # Copernicus Sentinel-2 Satellite Integration
 SENTINEL_CLIENT_ID=your_sentinel_client_id
@@ -45,118 +66,39 @@ SENTINEL_STATS_URL=https://sh.dataspace.copernicus.eu/statistics/v1
 SATELLITE_MAX_CLOUD=35
 
 # Google OAuth Integration
+# Add the same Client ID to Supabase Dashboard → Authentication → Providers → Google
 GOOGLE_CLIENT_ID=your_google_oauth_client_id
 ```
 
-## Render deployment
+### Supabase Auth Setup
 
-Build command:
+1. Create a project at [supabase.com](https://supabase.com).
+2. Go to **Authentication → Email** and configure whether email confirmation is required.
+3. Go to **Authentication → Providers → Google**, enable it, and paste your Google Client ID and Secret.
+4. Copy the **Project URL**, **anon/public key**, and **JWT Secret** from **Project Settings → API** into your `.env`.
+5. No manual SQL is needed for auth — Supabase manages the `auth.users` table automatically.
 
-```text
-pip install -r requirements.txt
-```
+## Deployment (Render & Supabase)
 
-Start command:
+1. Provision a PostgreSQL instance via Supabase and add the credentials to your environment variables.
+2. Push your repository to GitHub and connect it to Render.
+3. Build command: `pip install -r requirements.txt`
+4. Start command: `python -m uvicorn server.app:app --host 0.0.0.0 --port $PORT`
 
-```text
-python -m uvicorn server.app:app --host 0.0.0.0 --port $PORT
-```
+## Testing the Infrastructure
 
-The included `render.yaml` contains the same deployment settings.
-
-### Render environment variables
-
-Required for weather: **none**.
-
-Optional AI:
-- `OPENAI_API_KEY`
-- `OPENAI_MODEL`
-
-Sentinel-2:
-- `SENTINEL_CLIENT_ID`
-- `SENTINEL_CLIENT_SECRET`
-- `SENTINEL_TOKEN_URL`
-- `SENTINEL_STATS_URL`
-- `SATELLITE_MAX_CLOUD`
-
-Google OAuth:
-- `GOOGLE_CLIENT_ID`
-
-Use these Sentinel defaults unless you have a deliberate reason to override them:
-
-```text
-SENTINEL_TOKEN_URL=https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token
-SENTINEL_STATS_URL=https://sh.dataspace.copernicus.eu/statistics/v1
-SATELLITE_MAX_CLOUD=35
-```
-
-**Never put Sentinel secrets, OpenAI keys, tokens or passwords in HTML, JavaScript, GitHub, or public repos.** Add secret values only in Render Environment Variables or local `.env` files.
-
-## Testing the live weather service
-
-After deployment, open:
-
+Check API health and backend capabilities:
 ```text
 https://YOUR-RENDER-DOMAIN/api/health
 ```
 
-Then test weather for a farm point:
-
-```text
-https://YOUR-RENDER-DOMAIN/api/weather?latitude=-0.6752&longitude=34.7888
-```
-
-A successful response contains `daily.time`, `daily.precipitation_sum`, `daily.temperature_2m_max`, `daily.precipitation_probability_max`, and other requested values.
-
-For a compact service diagnostic:
-
-```text
-https://YOUR-RENDER-DOMAIN/api/diagnostics?latitude=-0.6752&longitude=34.7888
-```
-
-## Testing Sentinel-2 / NDVI
-
-First add the Sentinel OAuth client ID and secret to Render. Do not send the secret through ChatGPT.
-
-Then open:
-
+Test satellite OAuth and live data pipeline:
 ```text
 https://YOUR-RENDER-DOMAIN/api/diagnostics?latitude=-0.6752&longitude=34.7888&planting_date=2026-06-01
 ```
 
-The diagnostic distinguishes:
-- `not_configured` — credentials are missing.
-- `authenticated` — OAuth succeeded.
-- `authentication_failed` — OAuth failed.
-- `authenticated_no_observation` — authentication worked but no valid NDVI was returned for the location/time window.
-- statistics errors — authentication worked but the statistics request failed.
+## Security Posture
 
-The main `/api/analyze` response also reports whether weather and Sentinel-2 NDVI were live.
-
-## Online vs offline behavior
-
-The app deliberately distinguishes three states:
-
-1. **Online + live data:** `Live analysis`.
-2. **Online + server/live-data failure:** `Live data temporarily unavailable`. Local field inputs are shown, but no fake weather or satellite values are invented.
-3. **Genuinely offline:** `Offline farm check`.
-
-The browser's `navigator.onLine` state is therefore not used as proof that an upstream API is healthy.
-
-## Risk scoring
-
-The existing scoring concept is preserved:
-- Dryness
-- Heavy rain
-- Crop stress
-- Overall risk
-
-When live weather is available, forecast rainfall/temperature/probability feed the weather risk. When valid Sentinel-2 NDVI is available, its latest value and trend feed vegetation stress. If a live source is unavailable, the system does not invent a measurement.
-
-## Security
-
-Secrets are read only by the FastAPI backend from environment variables. Credentials are hashed using PBKDF2 with salt. The frontend never receives sensitive keys.
-
-## Current storage note
-
-User credentials are saved in `data/users.json` and farm history is stored in `data/farms.json`, which is appropriate for demonstration/small deployment. For production, move to PostgreSQL/PostGIS.
+- **Zero Client-Side Secrets:** Gemini API keys, Sentinel secrets, and database credentials never leave the FastAPI backend.
+- **Supabase Auth:** Passwords are never stored or hashed by the application. Supabase handles credential management and issues signed JWTs. The backend validates every request via `supabase.auth.get_user()`.
+- **Offline Data Integrity:** GPS coordinates and farm states are captured securely on the device and synchronized with the backend.
