@@ -13,12 +13,13 @@ UPLOADS.mkdir(exist_ok=True)
 load_dotenv(ROOT / ".env")
 
 from .routers import auth
-from .models import AnalyzeRequest
+from .models import AnalyzeRequest, ClinicRequest
 from .db import read_db, write_db
 from .weather import weather_data
 from .satellite import satellite_metadata, ndvi_series
 from .ai import ai_explain
 from .analysis import rule_risk, parse_gpx, parse_kml, parse_exif_gps
+from .clinic import clinic_diagnose
 
 app = FastAPI(title="MavunoGuard AI API", version="3.0.0")
 app.mount("/static", StaticFiles(directory=PUBLIC), name="static")
@@ -104,6 +105,39 @@ async def analyze(req: AnalyzeRequest):
 
 @app.get('/api/farms')
 def farms(): return read_db()[-50:]
+
+@app.post('/api/clinic')
+async def clinic(req: ClinicRequest, authorization: str | None = Header(None)):
+    """
+    MavunoGuard AI Clinic — image-based diagnosis endpoint.
+
+    Accepts a base64-encoded image and context metadata, sends it to
+    Gemini Vision, and returns a structured diagnostic report covering
+    crops, livestock, produce, and soil.
+    """
+    if not os.getenv("GEMINI_API_KEY"):
+        raise HTTPException(503, "AI Clinic requires a Gemini API key. Set GEMINI_API_KEY in your environment.")
+    
+    result = await clinic_diagnose(
+        image_b64=req.image_b64,
+        mime_type=req.mime_type,
+        category=req.category,
+        description=req.description,
+        location=req.location,
+        crop_or_animal=req.crop_or_animal,
+    )
+
+    # Surface a 422 only on hard model errors, not on low-confidence results
+    if result.get("error") and "API error" in result.get("confidence_note", ""):
+        raise HTTPException(502, detail={"message": result["summary"], "reason": result.get("confidence_note")})
+
+    return {
+        "id": uuid.uuid4().hex,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "category": req.category,
+        "subject": req.crop_or_animal,
+        "diagnosis": result,
+    }
 
 @app.get("/api/diagnostics")
 async def diagnostics(latitude: float = 0.0, longitude: float = 0.0, planting_date: str | None = None):

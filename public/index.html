@@ -16,12 +16,165 @@
 <main class="container">
 <section class="hero"><h1>Know your farm before the problem becomes a loss.</h1><p>MavunoGuard combines your farm location with weather, GIS and satellite vegetation information, then turns the numbers into simple actions, trends and visual warnings.</p></section>
 <div id="status" class="status"></div>
-<section id="authCard" class="auth card auth-card"><h1>Welcome to MavunoGuard</h1><p>Sign in to continue to your farm assessment dashboard.</p><div class="auth-tabs"><button id="loginTab" class="btn auth-tab active" onclick="showAuth('login')">Login</button><button id="registerTab" class="btn auth-tab" onclick="showAuth('register')">Register</button></div><form id="loginPanel" class="auth-panel active" onsubmit="submitLogin(event)"><label class="label">Email or Username</label><input id="loginUsername" autocomplete="email" required><label class="label">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required><button class="btn primary" style="width:100%;margin-top:16px" type="submit">Login</button></form><form id="registerPanel" class="auth-panel" onsubmit="submitRegister(event)"><label class="label">Username</label><input id="registerUsername" autocomplete="username" required minlength="3"><label class="label">Email</label><input id="registerEmail" type="email" autocomplete="email" required placeholder="you@example.com"><label class="label">Password</label><input id="registerPassword" type="password" autocomplete="new-password" required minlength="8"><button class="btn primary" style="width:100%;margin-top:16px" type="submit">Create account</button></form><div id="authError" class="auth-error"></div></section>
+<!-- View switcher tabs -->
+<div id="viewTabs" style="display:none;gap:8px;margin-bottom:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px">
+  <button id="tabFarm"   class="btn primary"    style="flex:1;font-size:13px;padding:9px 4px" onclick="switchView('farm')">🌾 Farm Assessment</button>
+  <button id="tabClinic" class="btn secondary"  style="flex:1;font-size:13px;padding:9px 4px" onclick="switchView('clinic')">🏥 AI Clinic</button>
+</div>
+<section id="authCard" class="auth card auth-card"><h1>Welcome to MavunoGuard</h1><p>Sign in to continue to your farm assessment dashboard.</p><div class="auth-tabs"><button id="loginTab" class="btn auth-tab active" onclick="showAuth('login')">Login</button><button id="registerTab" class="btn auth-tab" onclick="showAuth('register')">Register</button></div><form id="loginPanel" class="auth-panel active" onsubmit="submitLogin(event)"><label class="label">Email</label><input id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com"><label class="label">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required><button class="btn primary" style="width:100%;margin-top:16px" type="submit">Login</button></form><form id="registerPanel" class="auth-panel" onsubmit="submitRegister(event)"><label class="label">Username</label><input id="registerUsername" autocomplete="username" required minlength="3"><label class="label">Email</label><input id="registerEmail" type="email" autocomplete="email" required placeholder="you@example.com"><label class="label">Password</label><input id="registerPassword" type="password" autocomplete="new-password" required minlength="8"><button class="btn primary" style="width:100%;margin-top:16px" type="submit">Create account</button></form><div id="authError" class="auth-error"></div></section>
 <section id="formCard" class="card"><div class="steps"><span class="step active" id="s1">1 Farm</span><span class="step" id="s2">2 Crop</span><span class="step" id="s3">3 Condition</span></div>
 <div class="form-step active" id="step1"><h2>Locate the farm</h2><p class="small">GPS is optional. You can tap the map. The location is saved on this device for offline use.</p><div id="map" class="map"></div><div class="maptools"><button class="btn secondary" onclick="locateMe()">📍 Use device GPS</button><button class="btn secondary" onclick="saveOfflineArea()">⬇ Save map area offline</button></div><div id="locationText" class="location">Tap the map to place the farm.</div><div class="garmin"><b>📷 Garmin / GPS import</b><div class="small" style="margin:5px 0 8px">Import a GPX/KML track or a geo-tagged JPG/TIFF from your Garmin workflow. MavunoGuard will extract the coordinates.</div><input id="garminFile" type="file" accept=".gpx,.kml,.jpg,.jpeg,.tif,.tiff"><button class="btn secondary" style="margin-top:8px" onclick="importGarmin()">Import GPS data</button></div><label class="label">Farm name <span class="small">optional</span></label><input id="farmName" placeholder="e.g. Shalom Farm"><div class="row"><div><label class="label">Farm size</label><input id="farmSize" type="number" min="0" step="0.1" placeholder="0.5"></div><div><label class="label">Unit</label><select id="farmUnit"><option>Acres</option><option>Hectares</option></select></div></div><div class="actions"><span></span><button class="btn primary" onclick="next(2)">Continue →</button></div></div>
 <div class="form-step" id="step2"><h2>Crop</h2><label class="label">What are you growing?</label><select id="crop"><option value="maize">🌽 Maize</option><option value="beans">🫘 Beans</option><option value="sorghum">🌾 Sorghum</option><option value="potato">🥔 Irish potato</option><option value="vegetables">🥬 Vegetables</option><option value="banana">🍌 Banana</option></select><label class="label">Variety <span class="small">optional</span></label><input id="variety" placeholder="e.g. H614"><label class="label">Planting date</label><input id="plantDate" type="date"><label class="label">Expected harvest date <span class="small">optional</span></label><input id="harvestDate" type="date"><div class="actions"><button class="btn secondary" onclick="next(1)">← Back</button><button class="btn primary" onclick="next(3)">Continue →</button></div></div>
 <div class="form-step" id="step3"><h2>What is happening now?</h2><label class="label">Crop condition</label><div class="chips" data-group="health"><button class="chip" onclick="pick(this)">🟢 Healthy</button><button class="chip" onclick="pick(this)">🟡 Slightly stressed</button><button class="chip" onclick="pick(this)">🟠 Poor</button><button class="chip" onclick="pick(this)">🔴 Severely stressed</button></div><label class="label">Problems noticed <span class="small">choose only what you see</span></label><div class="chips" data-group="problems"><button class="chip" onclick="toggleMulti(this)">Yellowing leaves</button><button class="chip" onclick="toggleMulti(this)">Wilting</button><button class="chip" onclick="toggleMulti(this)">Stunted growth</button><button class="chip" onclick="toggleMulti(this)">Waterlogging</button><button class="chip" onclick="toggleMulti(this)">Dry soil</button><button class="chip" onclick="toggleMulti(this)">Pests</button><button class="chip" onclick="toggleMulti(this)">Disease symptoms</button><button class="chip" onclick="toggleMulti(this)">Weeds</button><button class="chip" onclick="toggleMulti(this)">Poor germination</button></div><label class="label">When did you notice it?</label><select id="noticed"><option>Today</option><option>1–3 days ago</option><option>4–7 days ago</option><option>More than a week ago</option></select><label class="label">Soil/drainage <span class="small">optional</span></label><div class="row"><select id="soil"><option value="">Soil unknown</option><option>Sandy</option><option>Clay</option><option>Loamy</option><option>Black soil</option><option>Red soil</option></select><select id="drainage"><option value="">Drainage unknown</option><option>Good</option><option>Moderate</option><option>Poor</option></select></div><label class="label">Flood history <span class="small">optional</span></label><div class="chips" data-group="flood"><button class="chip" onclick="pick(this)">Never</button><button class="chip" onclick="pick(this)">Occasionally</button><button class="chip" onclick="pick(this)">Frequently</button></div><label class="label">Crop photo <span class="small">optional</span></label><div class="photo"><input id="photo" type="file" accept="image/*" onchange="previewPhoto(event)"><img id="photoPreview"><div class="small">Use the same viewing spot when you want to compare changes over time.</div></div><div class="actions"><button class="btn secondary" onclick="next(2)">← Back</button><button class="btn primary" onclick="analyze()">Analyze my farm ✨</button></div></div></section>
 <section id="dashboard" class="dashboard" style="margin-top:15px"><div class="card"><div class="summary"><h2 id="dashTitle">Farm intelligence</h2><div class="small" id="summary"></div></div><div class="riskhead"><div><div class="score"><span id="score">—</span><span style="font-size:16px">/100</span></div><div class="small">Overall climate/crop risk</div></div><span class="pill" id="riskTitle">WAITING</span></div><div class="riskbar"><div id="riskFill" class="riskfill"></div></div><div class="metrics"><div class="metric"><small>☀️ Dryness</small><strong id="drought">—</strong></div><div class="metric"><small>🌧️ Heavy rain</small><strong id="floodRisk">—</strong></div><div class="metric"><small>🌿 Crop stress</small><strong id="cropStress">—</strong></div></div><div class="chartgrid" style="margin-top:12px"><div class="chart"><h3>⚠️ Why am I at risk?</h3><div id="whyRisk"></div></div><div class="chart"><h3>🌿 Vegetation story</h3><div id="vegStory"></div></div></div><div class="chartgrid"><div class="chart"><h3>Rain in the next 14 days</h3><svg id="rainChart" viewBox="0 0 500 210" preserveAspectRatio="none"></svg><div class="legend" id="rainLegend">Live Open-Meteo forecast • mm per day</div></div><div class="chart"><h3>Vegetation health (NDVI)</h3><svg id="ndviChart" viewBox="0 0 500 210" preserveAspectRatio="none"></svg><div class="legend" id="ndviLegend">Waiting for Sentinel-2 data</div></div><div class="chart"><h3>Risk composition</h3><svg id="pieChart" viewBox="0 0 300 220"></svg><div class="legend">The three largest drivers of today's result</div></div><div class="chart"><h3>What the system sees</h3><div id="evidence" style="line-height:1.6;font-size:13px"></div></div><div class="chart"><h3>📈 Farm history</h3><div id="history" style="line-height:1.6;font-size:13px"></div></div></div></div><div class="grid" style="margin-top:15px"><div class="card"><h2 id="headline">Result</h2><p id="why" style="line-height:1.6"></p><h3>Do these things first</h3><ol id="recommend" class="actions-list"></ol></div><div class="card"><h2>Watch next</h2><ul id="watch" class="actions-list"></ul><div class="source" id="sources"></div><button class="btn primary" style="margin-top:12px" onclick="window.scrollTo({top:document.getElementById('formCard').offsetTop-10,behavior:'smooth'})">Run another assessment</button></div></div></section>
+<!-- ═══════════════════════════════════════════════════════════
+     MAVUNOGUARD AI CLINIC
+     ═══════════════════════════════════════════════════════════ -->
+<section id="clinicSection" style="margin-top:18px;display:none">
+
+  <!-- Header banner -->
+  <div style="background:linear-gradient(135deg,#0b3d22,#1a7a40);border-radius:18px;padding:20px 22px;margin-bottom:16px;color:#fff">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-size:36px">🏥</div>
+      <div>
+        <div style="font-size:22px;font-weight:900">MavunoGuard <span style="color:#7eeaa0">AI Clinic</span></div>
+        <div style="font-size:13px;opacity:.85;margin-top:2px">Upload a photo — get an instant expert diagnosis for your crops, livestock, produce or soil.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category selector -->
+  <div class="card" style="margin-bottom:14px">
+    <h2 style="margin-top:0;font-size:17px">What would you like diagnosed?</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px" id="clinicCategoryGrid">
+      <button class="clinic-cat-btn active" data-cat="crop" onclick="selectClinicCat(this)" style="border:2px solid var(--g);background:#e8f8ed;border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer">
+        <div style="font-size:28px">🌱</div><div style="font-weight:800;font-size:13px;margin-top:6px">Crop / Plant</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Disease, pests, deficiency</div>
+      </button>
+      <button class="clinic-cat-btn" data-cat="animal" onclick="selectClinicCat(this)" style="border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer">
+        <div style="font-size:28px">🐄</div><div style="font-weight:800;font-size:13px;margin-top:6px">Livestock</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Cow, goat, chicken, pig</div>
+      </button>
+      <button class="clinic-cat-btn" data-cat="produce" onclick="selectClinicCat(this)" style="border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer">
+        <div style="font-size:28px">🌽</div><div style="font-weight:800;font-size:13px;margin-top:6px">Produce</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Post-harvest quality</div>
+      </button>
+      <button class="clinic-cat-btn" data-cat="soil" onclick="selectClinicCat(this)" style="border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer">
+        <div style="font-size:28px">🌍</div><div style="font-weight:800;font-size:13px;margin-top:6px">Soil</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Erosion, compaction, health</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Input form -->
+  <div class="card" style="margin-bottom:14px">
+    <h2 style="margin-top:0;font-size:17px">Upload a photo</h2>
+
+    <!-- Drop zone -->
+    <div id="clinicDropZone" onclick="document.getElementById('clinicImageInput').click()"
+      style="border:2.5px dashed #b6d4be;border-radius:16px;padding:28px 16px;text-align:center;cursor:pointer;background:#f7fdf9;transition:border-color .2s">
+      <div id="clinicPlaceholder">
+        <div style="font-size:40px">📷</div>
+        <div style="font-weight:800;margin:8px 0 4px">Tap to choose a photo</div>
+        <div style="font-size:12px;color:var(--muted)">JPG, PNG or WEBP • max 10 MB • clear, well-lit images give the best diagnosis</div>
+      </div>
+      <img id="clinicPreview" style="display:none;max-width:100%;max-height:280px;border-radius:12px;margin:0 auto">
+      <input id="clinicImageInput" type="file" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="onClinicImageChange(event)">
+    </div>
+
+    <button onclick="document.getElementById('clinicCameraInput').click()" class="btn secondary" style="margin-top:8px;width:100%;font-size:13px">
+      📸 Take a photo with camera
+    </button>
+    <input id="clinicCameraInput" type="file" accept="image/*" capture="environment" style="display:none" onchange="onClinicImageChange(event)">
+
+    <div style="margin-top:16px">
+      <label class="label">What are you seeing? <span class="small">describe the problem briefly</span></label>
+      <input id="clinicDescription" placeholder="e.g. Yellow patches on leaves, spreading fast">
+    </div>
+    <div class="row" style="margin-top:2px">
+      <div>
+        <label class="label">Crop / Animal type <span class="small">optional</span></label>
+        <input id="clinicSubject" placeholder="e.g. Maize, Dairy cow, Tomatoes">
+      </div>
+      <div>
+        <label class="label">Location <span class="small">optional</span></label>
+        <input id="clinicLocation" placeholder="e.g. Kisumu, 1200m altitude">
+      </div>
+    </div>
+
+    <button id="clinicSubmitBtn" class="btn primary" style="width:100%;margin-top:18px;font-size:15px;padding:14px" onclick="runClinicDiagnosis()">
+      🔬 Diagnose Now
+    </button>
+    <div id="clinicError" style="display:none;margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff0f0;color:#9b2424;font-size:13px"></div>
+  </div>
+
+  <!-- Loading -->
+  <div id="clinicLoading" class="card" style="display:none;text-align:center;padding:32px 16px">
+    <div style="font-size:44px">🔬</div>
+    <div style="font-weight:800;font-size:17px;margin-top:14px">AI Clinic is analyzing your image…</div>
+    <div style="color:var(--muted);font-size:13px;margin-top:6px">Gemini Vision is examining the photo. This takes 5–20 seconds.</div>
+  </div>
+
+  <!-- Results -->
+  <div id="clinicResults" style="display:none">
+
+    <div class="card" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px" id="clinicCategoryLabel">Crop Diagnosis</div>
+          <div style="font-size:24px;font-weight:950;color:var(--dark);margin:6px 0 0" id="clinicDiagName">—</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span id="clinicConfidencePill" style="padding:6px 12px;border-radius:999px;font-size:12px;font-weight:900;background:#eaf7ee;color:var(--g)">—</span>
+          <span id="clinicUrgencyPill" style="padding:6px 12px;border-radius:999px;font-size:12px;font-weight:900;background:#fff3d8;color:#744c08">—</span>
+        </div>
+      </div>
+      <p id="clinicSummary" style="margin:12px 0 0;line-height:1.6;color:#25352b"></p>
+    </div>
+
+    <div class="grid" style="margin-bottom:14px">
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--dark)">🔍 What the AI found</h3>
+        <ul id="clinicFindings" style="padding-left:18px;margin:0;line-height:1.8;color:#25352b"></ul>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--dark)">🔄 Other possibilities</h3>
+        <ul id="clinicDifferential" style="padding-left:18px;margin:0;line-height:1.8;color:#25352b"></ul>
+        <div id="clinicConfidenceNote" style="margin-top:12px;padding:10px;border-radius:10px;background:#f5f8f6;font-size:12px;color:var(--muted)"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <h3 style="margin-top:0;color:var(--dark)">⚡ Do these things first</h3>
+      <ol id="clinicActions" style="padding-left:0;list-style:none;margin:0" class="actions-list"></ol>
+    </div>
+
+    <div class="grid" style="margin-bottom:14px">
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--dark)">💊 Treatment</h3>
+        <ol id="clinicTreatment" style="padding-left:0;list-style:none;margin:0" class="actions-list"></ol>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--dark)">🛡️ Prevention</h3>
+        <ol id="clinicPrevention" style="padding-left:0;list-style:none;margin:0" class="actions-list"></ol>
+      </div>
+    </div>
+
+    <div class="card" style="background:#fff8e7;border-color:#f1c76b;margin-bottom:14px">
+      <h3 style="margin-top:0;color:#6b4c00">🚨 When to call for help</h3>
+      <p id="clinicEscalate" style="margin:0;line-height:1.6;color:#5a3e00"></p>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:4px">
+      <div class="source" id="clinicSource" style="flex:1"></div>
+      <button class="btn secondary" onclick="resetClinic()" style="font-size:13px">🔄 New diagnosis</button>
+    </div>
+
+  </div>
+
+</section>
+<!-- ═══ end AI Clinic ═══ -->
+
 <div class="footer">powered by mikeajanja#ajanjalabs</div></main><div id="toast" class="toast"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
 let lat=-0.6817,lng=34.7660,marker=null,map=null,current=1,lastResult=null,authToken=localStorage.getItem('mvg_auth_token')||null,currentUser=null;const $=id=>document.getElementById(id);
@@ -30,10 +183,10 @@ function setStatus(msg,offline=false){const s=$('status');s.textContent=msg;s.cl
 function setAuthError(msg){const e=$('authError');e.textContent=msg||'';e.style.display=msg?'block':'none'}
 function showAuth(mode){setAuthError('');$('loginTab').classList.toggle('active',mode==='login');$('registerTab').classList.toggle('active',mode==='register');$('loginPanel').classList.toggle('active',mode==='login');$('registerPanel').classList.toggle('active',mode==='register')}
 function authHeaders(extra={}){return authToken?{...extra,Authorization:`Bearer ${authToken}`}:{...extra}}
-function applyAuth(user){currentUser=user;document.body.classList.remove('auth-locked');$('authCard').classList.add('hidden');$('logoutBtn').classList.remove('hidden');$('userBadge').style.display='inline-block';$('userBadge').textContent=user?.username?`Signed in as ${user.username}`:'Signed in';setAuthError('');if(map)setTimeout(()=>map.invalidateSize(),60)}
+function applyAuth(user){currentUser=user;document.body.classList.remove('auth-locked');$('authCard').classList.add('hidden');$('logoutBtn').classList.remove('hidden');$('userBadge').style.display='inline-block';$('userBadge').textContent=user?.username?`Signed in as ${user.username}`:'Signed in';setAuthError('');if(map)setTimeout(()=>map.invalidateSize(),60);showViewTabs();}
 function clearAuth(){authToken=null;currentUser=null;localStorage.removeItem('mvg_auth_token');localStorage.removeItem('mvg_auth_user');document.body.classList.add('auth-locked');$('authCard').classList.remove('hidden');$('logoutBtn').classList.add('hidden');$('userBadge').style.display='none';$('userBadge').textContent=''}
 async function authRequest(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});let d=null;try{d=await r.json()}catch{}if(!r.ok)throw new Error(d?.detail||'Authentication failed');if(d.token){authToken=d.token;localStorage.setItem('mvg_auth_token',authToken);localStorage.setItem('mvg_auth_user',JSON.stringify(d.user));applyAuth(d.user)}return d}
-async function submitLogin(e){e.preventDefault();setAuthError('');try{await authRequest('/api/auth/login',{username:$('loginUsername').value.trim(),password:$('loginPassword').value});toast('Logged in successfully')}catch(err){setAuthError(err.message)}}
+async function submitLogin(e){e.preventDefault();setAuthError('');try{await authRequest('/api/auth/login',{email:$('loginEmail').value.trim(),password:$('loginPassword').value});toast('Logged in successfully')}catch(err){setAuthError(err.message)}}
 async function submitRegister(e){e.preventDefault();setAuthError('');try{const d=await authRequest('/api/auth/register',{username:$('registerUsername').value.trim(),email:$('registerEmail').value.trim(),password:$('registerPassword').value});if(d.token){toast('Account created — you are now signed in')}else{setAuthError(d.message||'Check your email to confirm your account, then log in.');showAuth('login')}}catch(err){setAuthError(err.message)}}
 async function restoreAuth(){if(!authToken){clearAuth();return}try{const r=await fetch('/api/auth/me',{headers:authHeaders()});if(!r.ok)throw new Error('Session expired');const user=await r.json();localStorage.setItem('mvg_auth_user',JSON.stringify(user));applyAuth(user)}catch{clearAuth()}}
 async function logout(){try{if(authToken)await fetch('/api/auth/logout',{method:'POST',headers:authHeaders()})}catch{}clearAuth();toast('Logged out')}
@@ -95,6 +248,203 @@ function renderPie(k){const vals=[Math.max(1,k.drought||0),Math.max(1,k.flood||0
 function resetApp(){location.reload()}
 window.addEventListener('online',()=>setStatus('Back online. Live weather and satellite checks are available again.'));window.addEventListener('offline',()=>setStatus('Offline mode: GPS/manual pin and saved map areas continue to work. Live weather/satellite refresh waits for connection.',true));
 (async()=>{const saved=localStorage.getItem('mvg_location');if(saved){try{const x=JSON.parse(saved);lat=x.lat;lng=x.lng}catch{}}initMap();await restoreAuth();if('serviceWorker' in navigator){try{await navigator.serviceWorker.register('/sw.js')}catch{}}if(!navigator.onLine)setStatus('Offline mode: GPS/manual pin and saved map areas continue to work.',true);const old=localStorage.getItem('mvg_last_result');if(old){try{lastResult=JSON.parse(old);toast('Previous farm result is available offline.')}catch{}}})();
+
+// ─── View switcher ────────────────────────────────────────────────────────────
+let currentView = 'farm';
+function switchView(view) {
+  currentView = view;
+  const farm    = $('formCard');
+  const dash    = $('dashboard');
+  const clinic  = $('clinicSection');
+  const tabF    = $('tabFarm');
+  const tabC    = $('tabClinic');
+  if (view === 'farm') {
+    farm.style.display    = '';
+    dash.style.display    = dash.classList.contains('show') ? '' : 'none';
+    clinic.style.display  = 'none';
+    tabF.className = 'btn primary';   tabF.style.flex = '1'; tabF.style.fontSize = '13px'; tabF.style.padding = '9px 4px';
+    tabC.className = 'btn secondary'; tabC.style.flex = '1'; tabC.style.fontSize = '13px'; tabC.style.padding = '9px 4px';
+  } else {
+    farm.style.display    = 'none';
+    dash.style.display    = 'none';
+    clinic.style.display  = '';
+    tabF.className = 'btn secondary'; tabF.style.flex = '1'; tabF.style.fontSize = '13px'; tabF.style.padding = '9px 4px';
+    tabC.className = 'btn primary';   tabC.style.flex = '1'; tabC.style.fontSize = '13px'; tabC.style.padding = '9px 4px';
+    window.scrollTo({ top: $('clinicSection').offsetTop - 10, behavior: 'smooth' });
+  }
+}
+// Show tab bar once the user is authenticated
+function showViewTabs() { $('viewTabs').style.display = 'flex'; }
+
+// ─── AI Clinic logic ──────────────────────────────────────────────────────────
+let clinicCategory = 'crop';
+let clinicImageFile = null;
+let clinicImageB64  = null;
+
+function selectClinicCat(btn) {
+  clinicCategory = btn.dataset.cat;
+  document.querySelectorAll('.clinic-cat-btn').forEach(b => {
+    b.style.border = '2px solid var(--line)';
+    b.style.background = '#fff';
+  });
+  btn.style.border = '2px solid var(--g)';
+  btn.style.background = '#e8f8ed';
+}
+
+function onClinicImageChange(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) {
+    showClinicError('Image is too large (max 10 MB). Please choose a smaller file or reduce the resolution.');
+    return;
+  }
+  clinicImageFile = file;
+  // Show preview
+  const preview = $('clinicPreview');
+  const placeholder = $('clinicPlaceholder');
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = 'block';
+  placeholder.style.display = 'none';
+  // Read as base64
+  const reader = new FileReader();
+  reader.onload = e => {
+    // Strip the "data:image/jpeg;base64," prefix — we only want the raw b64
+    const dataUrl = e.target.result;
+    clinicImageB64 = dataUrl.split(',')[1] || dataUrl;
+  };
+  reader.readAsDataURL(file);
+  hideClinicError();
+}
+
+function showClinicError(msg) {
+  const el = $('clinicError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideClinicError() {
+  $('clinicError').style.display = 'none';
+}
+
+async function runClinicDiagnosis() {
+  hideClinicError();
+  if (!authToken) { toast('Please log in before using the AI Clinic.'); return; }
+  if (!clinicImageB64) { showClinicError('Please choose a photo first.'); return; }
+
+  const description = $('clinicDescription').value.trim();
+  const subject     = $('clinicSubject').value.trim();
+  const location    = $('clinicLocation').value.trim();
+  const mimeType    = clinicImageFile ? (clinicImageFile.type || 'image/jpeg') : 'image/jpeg';
+
+  // Show loading, hide results and form submit
+  $('clinicLoading').style.display = '';
+  $('clinicResults').style.display = 'none';
+  $('clinicSubmitBtn').disabled = true;
+  $('clinicSubmitBtn').textContent = '⏳ Analyzing…';
+  window.scrollTo({ top: $('clinicLoading').offsetTop - 10, behavior: 'smooth' });
+
+  const payload = {
+    image_b64:      clinicImageB64,
+    mime_type:      mimeType,
+    category:       clinicCategory,
+    description:    description,
+    location:       location  || null,
+    crop_or_animal: subject   || null,
+  };
+
+  try {
+    const res = await fetch('/api/clinic', {
+      method:  'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body:    JSON.stringify(payload),
+    });
+    let body = null;
+    try { body = await res.json(); } catch {}
+    if (!res.ok) throw new Error(body?.detail?.message || body?.detail || `Server error ${res.status}`);
+    renderClinicResult(body);
+  } catch (err) {
+    showClinicError(`Diagnosis failed: ${err.message}. Check your connection and try again.`);
+    toast(`AI Clinic error: ${err.message}`);
+  } finally {
+    $('clinicLoading').style.display = 'none';
+    $('clinicSubmitBtn').disabled = false;
+    $('clinicSubmitBtn').textContent = '🔬 Diagnose Now';
+  }
+}
+
+const _URGENCY_STYLES = {
+  Critical: { bg: '#fff0f0', color: '#9b2424' },
+  High:     { bg: '#fff3d8', color: '#744c08' },
+  Moderate: { bg: '#e8f5ff', color: '#1044a0' },
+  Low:      { bg: '#eaf7ee', color: '#176536' },
+};
+const _CONFIDENCE_STYLES = {
+  High:     { bg: '#eaf7ee', color: '#176536' },
+  Moderate: { bg: '#fff3d8', color: '#744c08' },
+  Low:      { bg: '#fff0f0', color: '#9b2424' },
+};
+const _CAT_LABELS = {
+  crop: 'Crop / Plant Diagnosis', animal: 'Livestock Diagnosis',
+  produce: 'Post-Harvest Produce', soil: 'Soil Health Diagnosis',
+};
+
+function renderClinicResult(response) {
+  const d = response.diagnosis || {};
+  const urgency    = d.urgency    || 'Low';
+  const confidence = d.confidence || 'Low';
+
+  // Header
+  $('clinicCategoryLabel').textContent = _CAT_LABELS[response.category] || 'Diagnosis';
+  $('clinicDiagName').textContent      = d.primary_diagnosis || 'Unknown';
+  $('clinicSummary').textContent       = d.summary           || '';
+
+  // Pills
+  const uStyle = _URGENCY_STYLES[urgency]    || _URGENCY_STYLES.Moderate;
+  const cStyle = _CONFIDENCE_STYLES[confidence] || _CONFIDENCE_STYLES.Moderate;
+  const uPill  = $('clinicUrgencyPill');
+  const cPill  = $('clinicConfidencePill');
+  uPill.textContent      = `${urgency === 'Critical' ? '🔴 ' : urgency === 'High' ? '🟠 ' : urgency === 'Moderate' ? '🟡 ' : '🟢 '}${urgency} urgency`;
+  uPill.style.background = uStyle.bg; uPill.style.color = uStyle.color;
+  cPill.textContent      = `${confidence} confidence`;
+  cPill.style.background = cStyle.bg; cPill.style.color = cStyle.color;
+
+  // Lists helper
+  function toListItems(arr, numbered=false) {
+    if (!arr || !arr.length) return '<li style="color:var(--muted)">None identified</li>';
+    return arr.map((x,i) => numbered
+      ? `<li><span class="num">${i+1}</span>${x}</li>`
+      : `<li>${x}</li>`
+    ).join('');
+  }
+
+  $('clinicFindings').innerHTML     = toListItems(d.findings);
+  $('clinicDifferential').innerHTML = toListItems(d.differential_diagnoses);
+  $('clinicConfidenceNote').textContent = d.confidence_note ? `ℹ️ ${d.confidence_note}` : '';
+  $('clinicActions').innerHTML      = toListItems(d.immediate_actions, true);
+  $('clinicTreatment').innerHTML    = toListItems(d.treatment, true);
+  $('clinicPrevention').innerHTML   = toListItems(d.prevention, true);
+  $('clinicEscalate').textContent   = d.when_to_escalate || '';
+  $('clinicSource').textContent     = `Powered by ${d._model || 'Gemini Vision'} • ${response.created_at ? new Date(response.created_at).toLocaleString('en-GB') : ''}`;
+
+  $('clinicResults').style.display = '';
+  window.scrollTo({ top: $('clinicResults').offsetTop - 10, behavior: 'smooth' });
+}
+
+function resetClinic() {
+  clinicImageFile = null;
+  clinicImageB64  = null;
+  $('clinicImageInput').value  = '';
+  $('clinicCameraInput').value = '';
+  $('clinicPreview').style.display = 'none';
+  $('clinicPreview').src = '';
+  $('clinicPlaceholder').style.display = '';
+  $('clinicDescription').value = '';
+  $('clinicSubject').value      = '';
+  $('clinicLocation').value     = '';
+  $('clinicResults').style.display  = 'none';
+  $('clinicLoading').style.display  = 'none';
+  hideClinicError();
+  window.scrollTo({ top: $('clinicSection').offsetTop - 10, behavior: 'smooth' });
+}
 
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {

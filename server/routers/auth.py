@@ -93,21 +93,26 @@ def register(req: RegisterRequest):
 
 @router.post("/login")
 def login(req: LoginRequest):
-    """Sign in with email or username + password."""
+    """Sign in with email + password."""
     _require_supabase()
 
-    # Accept either a real email or the username-derived placeholder
-    email = req.username if "@" in req.username else f"{req.username}@mavunoguard.local"
+    # Prefer the dedicated email field; fall back to the username field
+    # (which may itself be an email address entered by older clients).
+    identifier = (req.email or req.username or "").strip()
+    if not identifier:
+        raise HTTPException(401, "Email is required")
+
+    email = identifier if "@" in identifier else f"{identifier}@mavunoguard.local"
+
     try:
         res = supabase.auth.sign_in_with_password(
             {"email": email, "password": req.password}
         )
     except Exception as exc:
-        # Supabase raises on bad credentials
-        raise HTTPException(401, "Invalid username or password")
+        raise HTTPException(401, "Invalid email or password")
 
     if res.user is None or res.session is None:
-        raise HTTPException(401, "Invalid username or password")
+        raise HTTPException(401, "Invalid email or password")
 
     return _token_response(res.session, res.user)
 

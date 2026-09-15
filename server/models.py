@@ -28,12 +28,13 @@ class RegisterRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    """Login payload — accepts either an email address or a plain username.
+    """Login payload — accepts email + password.
 
-    If `username` looks like an email it is sent as-is; otherwise we
-    reconstruct the placeholder email used at registration time.
+    `username` is kept for backwards compatibility; if `email` is provided
+    it takes priority over `username`.
     """
-    username: str   # kept as 'username' for frontend compatibility
+    email: Optional[str] = None   # preferred: the real email address
+    username: str = ""            # fallback / legacy field
     password: str
 
 
@@ -61,3 +62,40 @@ class FarmRequest(BaseModel):
 
 class AnalyzeRequest(FarmRequest):
     use_ai: bool = True
+
+
+class ClinicRequest(BaseModel):
+    """Payload for the AI Clinic image-diagnosis endpoint.
+
+    The image is transmitted as a base64-encoded string so the endpoint
+    works as a standard JSON POST — no multipart form required.
+    """
+    image_b64: str                          # base64-encoded image, no data-URI prefix
+    mime_type: str = "image/jpeg"           # image/jpeg | image/png | image/webp
+    category: str = "crop"                 # crop | animal | produce | soil
+    description: str = ""                  # farmer's description of the problem
+    location: Optional[str] = None         # e.g. "Western Kenya, 1800 m altitude"
+    crop_or_animal: Optional[str] = None   # e.g. "maize", "dairy cow", "tomatoes"
+
+    @field_validator("category")
+    @classmethod
+    def valid_category(cls, v: str) -> str:
+        allowed = {"crop", "animal", "produce", "soil"}
+        if v.lower() not in allowed:
+            raise ValueError(f"category must be one of: {', '.join(sorted(allowed))}")
+        return v.lower()
+
+    @field_validator("mime_type")
+    @classmethod
+    def valid_mime(cls, v: str) -> str:
+        allowed = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+        if v.lower() not in allowed:
+            return "image/jpeg"  # safe default
+        return v.lower()
+
+    @field_validator("image_b64")
+    @classmethod
+    def image_not_empty(cls, v: str) -> str:
+        if not v or len(v) < 100:
+            raise ValueError("image_b64 must contain a valid base64-encoded image.")
+        return v
