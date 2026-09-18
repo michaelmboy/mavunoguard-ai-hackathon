@@ -11,7 +11,7 @@ MavunoGuard is a robust, scalable decision-support platform designed to protect 
 - **Advanced Satellite Integration (Sentinel-2):** Integrates directly with the Copernicus Data Space public STAC search for Sentinel-2 L2A scenes, processing NDVI (Normalized Difference Vegetation Index) locally to monitor crop stress dynamically.
 - **Robust Weather Forecasting:** Primary integration with Open-Meteo for 14-day forecasts (including soil moisture tracking), with an independent, automatic failover to MET Norway to guarantee uptime.
 - **Offline-First Progressive Web App (PWA):** Built for the realities of rural connectivity. The HTML/CSS/JavaScript frontend is fully installable on mobile devices. If a connection drops, the system transitions to an "Offline farm check" utilizing locally captured rules and GPS parameters, synchronizing once back online.
-- **Security & Authentication:** Multi-layered authentication via **Supabase Auth** — email/password sign-up & login and Google OAuth 2.0 (One Tap). Supabase issues signed JWTs; the backend validates them server-side via `supabase.auth.get_user()`. No passwords are stored or hashed by the application. Secrets and API keys are strictly managed via environment variables.
+- **Security & Authentication:** Multi-layered authentication via **Supabase Auth** — email/password sign-up & login, **phone OTP (passwordless) sign-up & login** via SMS (Africa's Talking), and Google OAuth 2.0 (One Tap). Email is optional throughout — farmers can register and log in with only a phone number. Supabase issues signed JWTs; the backend validates them server-side via `supabase.auth.get_user()`. No passwords are stored or hashed by the application. Secrets and API keys are strictly managed via environment variables.
 
 ## Real-World Problem Solving
 
@@ -68,6 +68,12 @@ SATELLITE_MAX_CLOUD=35
 # Google OAuth Integration
 # Add the same Client ID to Supabase Dashboard → Authentication → Providers → Google
 GOOGLE_CLIENT_ID=your_google_oauth_client_id
+
+# SMS / Phone OTP Integration (Africa's Talking)
+# Sign up free at https://africastalking.com — sandbox works out of the box
+# Leave blank to use mock/print mode (OTP printed to server console, good for local dev)
+AFRICASTALKING_API_KEY=your_africastalking_api_key
+AFRICASTALKING_USERNAME=sandbox   # replace with your AT username in production
 ```
 
 ### Supabase Auth Setup

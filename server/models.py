@@ -5,12 +5,15 @@ from typing import List, Optional
 class RegisterRequest(BaseModel):
     """Registration payload.
 
-    `email` is now required — Supabase Auth uses email as the primary
-    identifier.  `username` is stored in user_metadata for display purposes.
+    Phone is the primary identifier. Email and password are both optional —
+    farmers can register with phone + OTP only. If no password is supplied
+    a stable phone-derived placeholder is used internally so Supabase Auth
+    can store the account; the user always logs in via OTP in that case.
     """
     username: str
-    password: str
-    email: str  # required; Supabase needs a real email to send confirmation
+    password: Optional[str] = None   # optional — omit to use phone-OTP-only auth
+    email: Optional[str] = None
+    phone: Optional[str] = None
 
     @field_validator("username")
     @classmethod
@@ -22,7 +25,7 @@ class RegisterRequest(BaseModel):
     @field_validator("password")
     @classmethod
     def password_min_length(cls, v: str) -> str:
-        if len(v) < 6:
+        if v is not None and len(v) < 6:
             raise ValueError("Password must be at least 6 characters.")
         return v
 
@@ -99,3 +102,22 @@ class ClinicRequest(BaseModel):
         if not v or len(v) < 100:
             raise ValueError("image_b64 must contain a valid base64-encoded image.")
         return v
+
+class VerifyOtpRequest(BaseModel):
+    """OTP verification payload.
+
+    mode="register" (default) — verify OTP then create a new account.
+    mode="login"              — verify OTP then return a session for an existing account.
+    """
+    phone: str
+    otp: str
+    # Required for registration; ignored when mode="login"
+    username: Optional[str] = None
+    password: Optional[str] = None
+    email: Optional[str] = None
+    mode: str = "register"   # "register" | "login"
+
+
+class PhoneLoginRequest(BaseModel):
+    """Kick off a passwordless phone-OTP login flow."""
+    phone: str
