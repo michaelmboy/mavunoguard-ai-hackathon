@@ -10,7 +10,8 @@ from typing import List, Optional
 class RegisterRequest(BaseModel):
     username: str
     password: str
-    phone number: str
+    phone_number: Optional[str] = None
+    email: Optional[EmailStr] = None
 
 class LoginRequest(BaseModel):
     username: str
